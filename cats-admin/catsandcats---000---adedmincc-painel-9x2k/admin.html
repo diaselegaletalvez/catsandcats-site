@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cats &amp; Cats — Admin</title>
+<style>
+  * { box-sizing: border-box; }
+  :root {
+    --bg: #0f1115; --card: #171a21; --line: #262b36; --ink: #f3f4f6;
+    --muted: #9aa3b2; --accent: #3b82f6; --danger: #ef4444; --ok: #22c55e;
+  }
+  body { margin: 0; font-family: -apple-system, system-ui, sans-serif; background: var(--bg); color: var(--ink); }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 28px 20px 80px; }
+  h1 { font-size: 1.4rem; margin: 0; }
+  h2 { font-size: 1.05rem; margin: 0 0 14px; }
+  .muted { color: var(--muted); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 22px; margin-bottom: 20px; }
+  label { display: block; font-size: .82rem; color: var(--muted); margin: 12px 0 5px; }
+  input, textarea, select { width: 100%; font: inherit; padding: 10px 12px; border-radius: 9px;
+    border: 1px solid var(--line); background: #0f131a; color: var(--ink); }
+  input:focus, textarea:focus { outline: none; border-color: var(--accent); }
+  textarea { min-height: 70px; resize: vertical; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .row > div { flex: 1; min-width: 140px; }
+  .check { display: flex; align-items: center; gap: 8px; margin-top: 14px; }
+  .check input { width: auto; }
+  button { font: inherit; font-weight: 600; border: none; border-radius: 9px; padding: 11px 18px; cursor: pointer; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { filter: brightness(1.08); }
+  .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--line); padding: 7px 12px; font-size: .85rem; }
+  .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); padding: 7px 12px; font-size: .85rem; }
+  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+  .msg { font-size: .88rem; margin-top: 12px; min-height: 18px; }
+  .msg.err { color: var(--danger); } .msg.ok { color: var(--ok); }
+  .comic-item { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-top: 1px solid var(--line); }
+  .comic-item:first-child { border-top: none; }
+  .comic-item img { width: 46px; height: 62px; object-fit: cover; border-radius: 6px; background: #0f131a; }
+  .comic-item .info { flex: 1; }
+  .comic-item .info b { display: block; }
+  .comic-item .info span { font-size: .8rem; color: var(--muted); }
+  .actions { display: flex; gap: 8px; }
+  .hidden { display: none !important; }
+  .center { text-align: center; }
+  .login-box { max-width: 380px; margin: 60px auto; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- LOGIN -->
+  <div id="loginView">
+    <div class="card login-box">
+      <h1>Cats &amp; Cats — Admin</h1>
+      <p class="muted" style="margin-top:6px;font-size:.9rem;">Área restrita. Só administradores entram.</p>
+      <label for="email">Email</label>
+      <input type="email" id="email" autocomplete="email">
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" autocomplete="current-password">
+      <button class="btn-primary" id="btnEntrar" style="width:100%;margin-top:18px;">Entrar</button>
+      <div class="msg" id="loginMsg"></div>
+    </div>
+  </div>
+
+  <!-- PAINEL -->
+  <div id="panelView" class="hidden">
+    <div class="topbar">
+      <h1>Cats &amp; Cats — Admin</h1>
+      <div class="muted" style="font-size:.85rem;">
+        <span id="adminEmail"></span>
+        <button class="btn-ghost" id="btnSair" style="margin-left:10px;">Sair</button>
+      </div>
+    </div>
+
+    <!-- CADASTRAR COMIC -->
+    <div class="card">
+      <h2>Cadastrar comic</h2>
+      <div class="row">
+        <div><label for="c_title">Título</label><input id="c_title"></div>
+        <div><label for="c_slug">Slug (ex: tico-1)</label><input id="c_slug"></div>
+      </div>
+      <div class="row">
+        <div><label for="c_series">Série</label><input id="c_series"></div>
+        <div><label for="c_number">Número</label><input id="c_number" type="number"></div>
+        <div><label for="c_price">Preço (R$)</label><input id="c_price" type="number" step="0.01" placeholder="29.90"></div>
+      </div>
+      <label for="c_synopsis">Sinopse</label>
+      <textarea id="c_synopsis"></textarea>
+      <div class="row">
+        <div><label for="c_genre">Gênero</label><input id="c_genre"></div>
+        <div><label for="c_rating">Classificação</label><input id="c_rating" placeholder="Livre, 12, 16..."></div>
+      </div>
+      <div class="row">
+        <div><label for="c_author">Autor</label><input id="c_author"></div>
+        <div><label for="c_artist">Artista</label><input id="c_artist"></div>
+      </div>
+      <label for="c_cover">Capa (imagem)</label>
+      <input type="file" id="c_cover" accept="image/*">
+      <div class="check"><input type="checkbox" id="c_published" checked><label for="c_published" style="margin:0;">Publicado (aparece na loja)</label></div>
+      <button class="btn-primary" id="btnCadastrar" style="margin-top:18px;">Cadastrar comic</button>
+      <div class="msg" id="cadMsg"></div>
+    </div>
+
+    <!-- LISTA -->
+    <div class="card">
+      <h2>Comics cadastrados</h2>
+      <div id="listaComics"><p class="muted">Carregando...</p></div>
+    </div>
+
+    <!-- FERRAMENTAS DE DEV -->
+    <div class="card">
+      <h2>Ferramentas de dev</h2>
+      <p class="muted" style="font-size:.85rem;margin-top:-8px;">Mudar o plano de um usuário pelo email.</p>
+      <div class="row">
+        <div><label for="d_email">Email do usuário</label><input id="d_email" type="email"></div>
+        <div><label for="d_plan">Plano</label>
+          <select id="d_plan">
+            <option value="free">Grátis</option>
+            <option value="pro">Pro</option>
+            <option value="family">Family</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-primary" id="btnPlano" style="margin-top:16px;">Aplicar plano</button>
+      <div class="msg" id="devMsg"></div>
+    </div>
+
+    <!-- PÁGINAS -->
+    <div class="card hidden" id="pagesCard">
+      <h2>Adicionar páginas — <span id="pagesComicTitle"></span></h2>
+      <p class="muted" style="font-size:.85rem;margin-top:-8px;">As páginas entram na ordem dos arquivos. Nomeie como 01, 02, 03... para garantir a ordem.</p>
+      <label for="p_files">Páginas (várias imagens)</label>
+      <input type="file" id="p_files" accept="image/*" multiple>
+      <button class="btn-primary" id="btnPaginas" style="margin-top:16px;">Enviar páginas</button>
+      <button class="btn-ghost" id="btnFecharPaginas" style="margin-left:8px;">Fechar</button>
+      <div class="msg" id="pagesMsg"></div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SB_URL = 'https://urguoedgajhykkczatcx.supabase.co';
+  const SB_KEY = 'sb_publishable_53he8rq2bdCmlEVyHf0Q3Q_Mnl1jim_';
+  const BUCKET = 'comics-images';
+  const sb = supabase.createClient(SB_URL, SB_KEY);
+
+  const $ = (id) => document.getElementById(id);
+  let comicSelecionado = null;
+
+  // ---------- Login ----------
+  $('btnEntrar').addEventListener('click', async () => {
+    const email = $('email').value.trim();
+    const senha = $('senha').value;
+    const msg = $('loginMsg'); msg.className = 'msg';
+    if (!email || !senha) { msg.classList.add('err'); msg.textContent = 'Preencha email e senha.'; return; }
+    msg.textContent = 'Entrando...';
+    const { error } = await sb.auth.signInWithPassword({ email, password: senha });
+    if (error) { msg.classList.add('err'); msg.textContent = 'Email ou senha incorretos.'; }
+  });
+
+  $('btnSair').addEventListener('click', () => sb.auth.signOut());
+
+  async function ehAdmin(userId) {
+    const { data } = await sb.from('admins').select('user_id').eq('user_id', userId).maybeSingle();
+    return !!data;
+  }
+
+  sb.auth.onAuthStateChange(async (_e, session) => {
+    if (session && session.user) {
+      const admin = await ehAdmin(session.user.id);
+      if (!admin) {
+        $('loginMsg').className = 'msg err';
+        $('loginMsg').textContent = 'Esta conta não é administradora. Acesso negado.';
+        await sb.auth.signOut();
+        return;
+      }
+      $('loginView').classList.add('hidden');
+      $('panelView').classList.remove('hidden');
+      $('adminEmail').textContent = session.user.email;
+      carregarComics();
+    } else {
+      $('panelView').classList.add('hidden');
+      $('loginView').classList.remove('hidden');
+    }
+  });
+
+  // ---------- Cadastrar comic ----------
+  $('btnCadastrar').addEventListener('click', async () => {
+    const msg = $('cadMsg'); msg.className = 'msg';
+    const title = $('c_title').value.trim();
+    const slug = $('c_slug').value.trim();
+    const coverFile = $('c_cover').files[0];
+    if (!title || !slug) { msg.classList.add('err'); msg.textContent = 'Título e slug são obrigatórios.'; return; }
+    msg.textContent = 'Cadastrando...';
+    try {
+      let coverUrl = null;
+      if (coverFile) {
+        const ext = coverFile.name.split('.').pop();
+        const path = 'covers/' + slug + '-' + Date.now() + '.' + ext;
+        const { error: upErr } = await sb.storage.from(BUCKET).upload(path, coverFile);
+        if (upErr) throw upErr;
+        coverUrl = sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+      }
+      const precoReais = parseFloat($('c_price').value || '0');
+      const { error: insErr } = await sb.from('comics').insert({
+        title, slug,
+        series: $('c_series').value.trim() || null,
+        number: $('c_number').value ? parseInt($('c_number').value) : null,
+        synopsis: $('c_synopsis').value.trim() || null,
+        genre: $('c_genre').value.trim() || null,
+        age_rating: $('c_rating').value.trim() || null,
+        author: $('c_author').value.trim() || null,
+        artist: $('c_artist').value.trim() || null,
+        price_cents: Math.round(precoReais * 100),
+        cover_url: coverUrl,
+        published: $('c_published').checked,
+      });
+      if (insErr) throw insErr;
+      msg.className = 'msg ok'; msg.textContent = 'Comic cadastrado!';
+      ['c_title','c_slug','c_series','c_number','c_price','c_synopsis','c_genre','c_rating','c_author','c_artist'].forEach(id => $(id).value = '');
+      $('c_cover').value = '';
+      carregarComics();
+    } catch (e) {
+      msg.className = 'msg err';
+      msg.textContent = 'Erro: ' + (e.message || e) + (/duplicate/i.test(e.message || '') ? ' (slug já existe)' : '');
+    }
+  });
+
+  // ---------- Listar comics ----------
+  async function carregarComics() {
+    const box = $('listaComics');
+    const { data, error } = await sb.from('comics').select('*').order('created_at', { ascending: false });
+    if (error) { box.innerHTML = '<p class="msg err">Erro ao carregar: ' + error.message + '</p>'; return; }
+    if (!data || data.length === 0) { box.innerHTML = '<p class="muted">Nenhum comic ainda.</p>'; return; }
+    box.innerHTML = '';
+    data.forEach(c => {
+      const div = document.createElement('div');
+      div.className = 'comic-item';
+      div.innerHTML =
+        '<img src="' + (c.cover_url || '') + '" alt="">' +
+        '<div class="info"><b></b><span></span></div>' +
+        '<div class="actions">' +
+          '<button class="btn-ghost">Páginas</button>' +
+          '<button class="btn-danger">Apagar</button>' +
+        '</div>';
+      div.querySelector('b').textContent = c.title;
+      div.querySelector('span').textContent = 'slug: ' + c.slug + '  ·  R$ ' + ((c.price_cents || 0) / 100).toFixed(2) + (c.published ? '' : '  ·  (não publicado)');
+      const [btnPag, btnDel] = div.querySelectorAll('button');
+      btnPag.addEventListener('click', () => abrirPaginas(c.id, c.title));
+      btnDel.addEventListener('click', () => apagarComic(c.id, c.title));
+      box.appendChild(div);
+    });
+  }
+
+  async function apagarComic(id, title) {
+    if (!confirm('Apagar o comic "' + title + '"? Isso também apaga as páginas dele.')) return;
+    const { error } = await sb.from('comics').delete().eq('id', id);
+    if (error) { alert('Erro ao apagar: ' + error.message); return; }
+    carregarComics();
+  }
+
+  // ---------- Páginas ----------
+  function abrirPaginas(comicId, title) {
+    comicSelecionado = comicId;
+    $('pagesComicTitle').textContent = title;
+    $('pagesCard').classList.remove('hidden');
+    $('pagesMsg').textContent = '';
+    $('pagesCard').scrollIntoView({ behavior: 'smooth' });
+  }
+  $('btnFecharPaginas').addEventListener('click', () => $('pagesCard').classList.add('hidden'));
+
+  $('btnPaginas').addEventListener('click', async () => {
+    const msg = $('pagesMsg'); msg.className = 'msg';
+    const files = Array.from($('p_files').files);
+    if (!comicSelecionado) { msg.classList.add('err'); msg.textContent = 'Nenhum comic selecionado.'; return; }
+    if (files.length === 0) { msg.classList.add('err'); msg.textContent = 'Escolha as imagens das páginas.'; return; }
+    files.sort((a, b) => a.name.localeCompare(b.name));
+    try {
+      for (let i = 0; i < files.length; i++) {
+        msg.className = 'msg'; msg.textContent = 'Enviando página ' + (i + 1) + ' de ' + files.length + '...';
+        const ext = files[i].name.split('.').pop();
+        const path = 'pages/' + comicSelecionado + '/' + String(i + 1).padStart(3, '0') + '.' + ext;
+        const { error: upErr } = await sb.storage.from(BUCKET).upload(path, files[i], { upsert: true });
+        if (upErr) throw upErr;
+        const url = sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+        const { error: insErr } = await sb.from('comic_pages').insert({ comic_id: comicSelecionado, page_number: i + 1, image_url: url });
+        if (insErr) throw insErr;
+      }
+      msg.className = 'msg ok'; msg.textContent = files.length + ' página(s) enviada(s)!';
+      $('p_files').value = '';
+    } catch (e) {
+      msg.className = 'msg err'; msg.textContent = 'Erro: ' + (e.message || e);
+    }
+  });
+  // ---------- Ferramentas de dev: mudar plano ----------
+  $('btnPlano').addEventListener('click', async () => {
+    const msg = $('devMsg'); msg.className = 'msg';
+    const email = $('d_email').value.trim();
+    const plan = $('d_plan').value;
+    if (!email) { msg.classList.add('err'); msg.textContent = 'Digite o email do usuário.'; return; }
+    msg.textContent = 'Aplicando...';
+    try {
+      const { data, error } = await sb.functions.invoke('admin-tools', { body: { action: 'set_plan', email, plan } });
+      if (error) {
+        let det = '';
+        try { const b = await error.context.json(); if (b && b.erro) det = ': ' + b.erro; } catch (_) {}
+        msg.className = 'msg err'; msg.textContent = 'Erro' + det;
+        return;
+      }
+      msg.className = 'msg ok';
+      msg.textContent = 'Plano de ' + data.email + ' agora é ' + data.plan + '.';
+    } catch (e) {
+      msg.className = 'msg err'; msg.textContent = 'Erro ao aplicar o plano.';
+    }
+  });
+</script>
+</body>
+</html>
