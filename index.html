@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cats & Cats — Comics e itens temáticos</title>
+<meta name="description" content="Cats & Cats: loja de comics e itens temáticos. Compre físico ou leia online.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,500&family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f4f0;
+    --ink: #0c0c0c;
+    --muted: #6b6862;
+    --line: #d9d5cd;
+    --card: #ffffff;
+    --shadow: 0 1px 0 rgba(0,0,0,.04), 0 18px 40px -28px rgba(0,0,0,.45);
+    --display: "Fraunces", Georgia, serif;
+    --body: "Albert Sans", system-ui, sans-serif;
+  }
+  html[data-theme="dark"] {
+    --bg: #0c0c0d;
+    --ink: #f3f1ec;
+    --muted: #9a958c;
+    --line: #262626;
+    --card: #161617;
+    --shadow: 0 1px 0 rgba(255,255,255,.03), 0 24px 50px -30px rgba(0,0,0,.9);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--body);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    transition: background .4s ease, color .4s ease;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  .wrap { width: min(1100px, 92vw); margin: 0 auto; }
+
+  /* Header */
+  header {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(10px);
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+  .brand { font-family: var(--display); font-weight: 800; font-size: 1.35rem; letter-spacing: -.02em; display: flex; align-items: center; gap: 10px; }
+  .brand .mark {
+    width: 30px; height: 30px; border-radius: 9px; background: var(--ink); color: var(--bg);
+    display: grid; place-items: center; font-family: var(--display); font-size: .95rem; font-weight: 800;
+  }
+  .nav-links { display: flex; gap: 28px; align-items: center; font-size: .92rem; font-weight: 500; }
+  .nav-links a { color: var(--muted); transition: color .2s; }
+  .nav-links a:hover { color: var(--ink); }
+  .toggle {
+    width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line);
+    background: var(--card); color: var(--ink); cursor: pointer; display: grid; place-items: center;
+    transition: transform .3s, border-color .2s;
+  }
+  .toggle:hover { transform: rotate(-12deg); border-color: var(--ink); }
+  .toggle svg { width: 17px; height: 17px; }
+  @media (max-width: 680px){ .nav-links a:not(.cta){ display:none; } }
+
+  /* Hero */
+  .hero { padding: 92px 0 70px; border-bottom: 1px solid var(--line); position: relative; }
+  .eyebrow { font-size: .78rem; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .hero h1 {
+    font-family: var(--display); font-weight: 800; letter-spacing: -.03em;
+    font-size: clamp(2.6rem, 7vw, 5.2rem); line-height: .98; margin: 18px 0 22px; max-width: 14ch;
+  }
+  .hero h1 em { font-style: italic; font-weight: 500; }
+  .hero p { font-size: 1.12rem; color: var(--muted); max-width: 46ch; }
+  .hero-actions { display: flex; gap: 14px; margin-top: 34px; flex-wrap: wrap; }
+  .btn {
+    font-family: var(--body); font-weight: 600; font-size: .95rem; cursor: pointer;
+    padding: 13px 26px; border-radius: 999px; border: 1px solid var(--ink);
+    transition: transform .15s, background .2s, color .2s;
+  }
+  .btn-primary { background: var(--ink); color: var(--bg); }
+  .btn-primary:hover { transform: translateY(-2px); }
+  .btn-ghost { background: transparent; color: var(--ink); }
+  .btn-ghost:hover { background: var(--ink); color: var(--bg); }
+
+  /* Section heading */
+  .sec { padding: 78px 0; border-bottom: 1px solid var(--line); }
+  .sec-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 38px; gap: 20px; flex-wrap: wrap; }
+  .sec-head h2 { font-family: var(--display); font-weight: 800; font-size: clamp(1.8rem, 4vw, 2.7rem); letter-spacing: -.02em; }
+  .sec-head span { color: var(--muted); font-size: .9rem; }
+
+  /* Catalog */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 22px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 18px; overflow: hidden;
+    box-shadow: var(--shadow); display: flex; flex-direction: column; transition: transform .2s, border-color .2s;
+  }
+  .card:hover { transform: translateY(-4px); border-color: var(--ink); }
+  .thumb { aspect-ratio: 3/4; display: grid; place-items: center; position: relative;
+    background:
+      repeating-linear-gradient(45deg, transparent 0 14px, color-mix(in srgb, var(--ink) 5%, transparent) 14px 15px),
+      var(--bg);
+    border-bottom: 1px solid var(--line); }
+  .thumb .glyph { font-family: var(--display); font-weight: 800; font-size: 2.4rem; opacity: .15; letter-spacing: -.04em; }
+  .tag { position: absolute; top: 12px; left: 12px; font-size: .68rem; letter-spacing: .12em; text-transform: uppercase;
+    background: var(--ink); color: var(--bg); padding: 4px 9px; border-radius: 6px; font-weight: 600; }
+  .card-body { padding: 16px 16px 18px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .card-body h3 { font-family: var(--display); font-weight: 600; font-size: 1.12rem; letter-spacing: -.01em; }
+  .card-body .meta { color: var(--muted); font-size: .85rem; flex: 1; }
+  .price-row { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+  .price { font-weight: 700; font-size: 1.05rem; }
+  .buy { font-size: .82rem; font-weight: 600; padding: 8px 16px; border-radius: 999px; border: 1px solid var(--ink);
+    background: transparent; color: var(--ink); cursor: pointer; transition: background .2s, color .2s; }
+  .buy:hover { background: var(--ink); color: var(--bg); }
+
+  /* Plans */
+  .plans { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  @media (max-width: 680px){ .plans{ grid-template-columns: 1fr; } }
+  .plan { border: 1px solid var(--line); border-radius: 22px; padding: 32px; background: var(--card); box-shadow: var(--shadow); }
+  .plan.feature { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .plan h3 { font-family: var(--display); font-weight: 800; font-size: 1.5rem; }
+  .plan .cost { font-family: var(--display); font-weight: 800; font-size: 2.6rem; margin: 10px 0 4px; letter-spacing: -.02em; }
+  .plan .cost small { font-size: .9rem; font-weight: 500; opacity: .7; }
+  .plan ul { list-style: none; margin: 22px 0 26px; display: flex; flex-direction: column; gap: 11px; font-size: .94rem; }
+  .plan li { display: flex; gap: 10px; align-items: flex-start; }
+  .plan li::before { content: "—"; opacity: .5; }
+  .plan .btn { width: 100%; text-align: center; }
+  .plan.feature .btn { background: var(--bg); color: var(--ink); border-color: var(--bg); }
+
+  /* Footer */
+  footer { padding: 60px 0 50px; }
+  .foot { display: flex; justify-content: space-between; gap: 30px; flex-wrap: wrap; align-items: flex-end; }
+  .foot .brand { margin-bottom: 8px; }
+  .foot p { color: var(--muted); font-size: .88rem; max-width: 40ch; }
+  .foot-links { display: flex; gap: 22px; font-size: .9rem; color: var(--muted); }
+  .foot-links a:hover { color: var(--ink); }
+  .copy { margin-top: 40px; padding-top: 22px; border-top: 1px solid var(--line); color: var(--muted); font-size: .8rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+
+  /* Auth */
+  .auth-area { display: flex; align-items: center; gap: 12px; }
+  .auth-btn { font-family: var(--body); font-size: .85rem; font-weight: 600; padding: 8px 18px; border-radius: 999px;
+    border: 1px solid var(--ink); background: var(--ink); color: var(--bg); cursor: pointer; transition: transform .15s; }
+  .auth-btn:hover { transform: translateY(-2px); }
+  .user-chip { font-size: .85rem; color: var(--muted); display: flex; align-items: center; gap: 10px; }
+  .user-chip strong { color: var(--ink); font-weight: 600; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .link-btn { background: none; border: none; color: var(--muted); cursor: pointer; font: inherit; font-size: .8rem; text-decoration: underline; }
+  .link-btn:hover { color: var(--ink); }
+
+  /* Modal */
+  .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.5); backdrop-filter: blur(4px);
+    display: none; place-items: center; z-index: 100; padding: 20px; }
+  .modal-bg.open { display: grid; }
+  .modal { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 34px;
+    width: min(420px, 100%); box-shadow: var(--shadow); }
+  .modal h3 { font-family: var(--display); font-weight: 800; font-size: 1.6rem; margin-bottom: 6px; }
+  .modal p.sub { color: var(--muted); font-size: .9rem; margin-bottom: 22px; }
+  .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  .field label { font-size: .82rem; font-weight: 600; color: var(--muted); }
+  .field input { font: inherit; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line);
+    background: var(--bg); color: var(--ink); }
+  .field input:focus { outline: none; border-color: var(--ink); }
+  .modal .btn { width: 100%; text-align: center; margin-top: 6px; }
+  .modal-msg { font-size: .85rem; margin-top: 14px; min-height: 20px; }
+  .modal-msg.err { color: #c0392b; }
+  .modal-msg.ok { color: #1e8449; }
+  .modal-foot { margin-top: 18px; font-size: .85rem; color: var(--muted); text-align: center; }
+  .modal-close { float: right; background: none; border: none; font-size: 1.4rem; cursor: pointer;
+    color: var(--muted); line-height: 1; }
+  .modal-close:hover { color: var(--ink); }
+
+  /* reveal */
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="#" class="brand"><span class="mark">C</span> Cats &amp; Cats</a>
+    <nav class="nav-links">
+      <a href="#loja">Loja</a>
+      <a href="#planos">Planos</a>
+      <a href="#sobre">Sobre</a>
+      <button class="toggle" id="themeToggle" aria-label="Alternar tema">
+        <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+      <div class="auth-area" id="authArea">
+        <button class="auth-btn" id="authBtn">Entrar</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow reveal">Loja de comics · feito no Brasil</p>
+      <h1 class="reveal">Comics que você <em>guarda</em> e histórias que você <em>lê</em>.</h1>
+      <p class="reveal">Edições físicas, versões online mais baratas e itens temáticos. Assine e leia onde quiser, em qualquer dispositivo.</p>
+      <div class="hero-actions reveal">
+        <a href="#loja" class="btn btn-primary">Ver a loja</a>
+        <a href="#planos" class="btn btn-ghost">Conhecer os planos</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="loja">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <h2>A loja</h2>
+        <span>Comics, camisas e xícaras · pagamento via Pix</span>
+      </div>
+      <div class="grid">
+        <article class="card reveal">
+          <div class="thumb"><span class="tag">Comic</span><span class="glyph">T</span></div>
+          <div class="card-body">
+            <h3>Tico — Edição 1</h3>
+            <p class="meta">O primeiro da série. Físico ou online.</p>
+            <div class="price-row"><span class="price">R$ 29,90</span><button class="buy" data-item="tico-1">Comprar</button></div>
+          </div>
+        </article>
+        <article class="card reveal">
+          <div class="thumb"><span class="tag">Comic</span><span class="glyph">2</span></div>
+          <div class="card-body">
+            <h3>Tico — Edição 2</h3>
+            <p class="meta">Continuação da série Tico.</p>
+            <div class="price-row"><span class="price">R$ 29,90</span><button class="buy" data-item="tico-2">Comprar</button></div>
+          </div>
+        </article>
+        <article class="card reveal">
+          <div class="thumb"><span class="tag">Camisa</span><span class="glyph">C</span></div>
+          <div class="card-body">
+            <h3>Camisa temática</h3>
+            <p class="meta">Estampa da coleção Cats &amp; Cats.</p>
+            <div class="price-row"><span class="price">R$ 79,90</span><button class="buy" data-item="camisa">Comprar</button></div>
+          </div>
+        </article>
+        <article class="card reveal">
+          <div class="thumb"><span class="tag">Xícara</span><span class="glyph">X</span></div>
+          <div class="card-body">
+            <h3>Xícara Cats &amp; Cats</h3>
+            <p class="meta">Cerâmica, 300ml.</p>
+            <div class="price-row"><span class="price">R$ 49,90</span><button class="buy" data-item="xicara">Comprar</button></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="planos">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <h2>Planos</h2>
+        <span>Leia online e ganhe vantagens</span>
+      </div>
+      <div class="plans">
+        <div class="plan reveal">
+          <h3>Pro</h3>
+          <div class="cost">R$ 30 <small>/mês</small></div>
+          <ul>
+            <li>10% de desconto nas compras</li>
+            <li>Ler online / biblioteca completa</li>
+            <li>Entrega rápida de comics</li>
+            <li>1 livro = 1 tema especial</li>
+          </ul>
+          <a href="#" class="btn btn-primary" data-item="pro">Assinar Pro</a>
+        </div>
+        <div class="plan feature reveal">
+          <h3>Family</h3>
+          <div class="cost">R$ 40 <small>/mês</small></div>
+          <ul>
+            <li>Tudo do plano Pro</li>
+            <li>Até 4 contas</li>
+            <li>Fusão de famílias (R$ 5)</li>
+            <li>7 dias de teste grátis</li>
+          </ul>
+          <a href="#" class="btn" data-item="family">Começar teste grátis</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="sobre">
+    <div class="wrap" style="max-width:720px;">
+      <div class="sec-head reveal"><h2>Sobre</h2></div>
+      <p class="reveal" style="font-size:1.15rem; color:var(--muted);">A <strong style="color:var(--ink);">Cats &amp; Cats</strong> é uma loja de comics e itens temáticos. Você compra aqui no site (pagamento por Pix) e lê no app, em qualquer dispositivo. Cada nova edição libera vantagens e descontos para quem acompanha as séries.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <div class="brand"><span class="mark">C</span> Cats &amp; Cats</div>
+        <p>Comics, camisas e xícaras. Compre no site, leia no app.</p>
+      </div>
+      <div class="foot-links">
+        <a href="#loja">Loja</a>
+        <a href="#planos">Planos</a>
+        <a href="#sobre">Sobre</a>
+      </div>
+    </div>
+    <div class="copy">
+      <span>© 2026 Cats &amp; Cats</span>
+      <span>catsandcatsstore.com.br</span>
+    </div>
+  </div>
+</footer>
+
+<div class="modal-bg" id="authModal">
+  <div class="modal">
+    <button class="modal-close" id="modalClose" aria-label="Fechar">&times;</button>
+    <h3 id="modalTitle">Entrar</h3>
+    <p class="sub" id="modalSub">Acesse sua conta Cats &amp; Cats.</p>
+    <div class="field">
+      <label for="authEmail">Email</label>
+      <input type="email" id="authEmail" autocomplete="email" placeholder="voce@email.com">
+    </div>
+    <div class="field">
+      <label for="authPass">Senha</label>
+      <input type="password" id="authPass" autocomplete="current-password" placeholder="senha">
+    </div>
+    <button class="btn btn-primary" id="authSubmit">Entrar</button>
+    <div class="modal-msg" id="authMsg"></div>
+    <div class="modal-foot" id="authFoot">Não tem conta? <button class="link-btn" id="authSwitch">Criar conta</button></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // Supabase — mesma base de contas do app
+  const SB_URL = 'https://urguoedgajhykkczatcx.supabase.co';
+  const SB_KEY = 'sb_publishable_53he8rq2bdCmlEVyHf0Q3Q_Mnl1jim_';
+  const sb = supabase.createClient(SB_URL, SB_KEY);
+
+  // Tema claro/escuro (lembra a escolha durante a sessão; segue o sistema na 1ª visita)
+  const root = document.documentElement;
+  const icon = document.getElementById('themeIcon');
+  const sun = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+  const moon = '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>';
+  function setTheme(t){ root.setAttribute('data-theme', t); icon.innerHTML = t === 'dark' ? sun : moon; }
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  setTheme(prefersDark ? 'dark' : 'light');
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+
+  // Revelar elementos ao rolar
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .12 });
+  document.querySelectorAll('.reveal').forEach((el, i) => { el.style.transitionDelay = (i % 6 * 60) + 'ms'; io.observe(el); });
+
+  // ===== Login (mesma conta do app, via Supabase) =====
+  const authModal = document.getElementById('authModal');
+  const authArea = document.getElementById('authArea');
+  let authMode = 'login';
+  let sessaoAtual = null;
+
+  function abrirModal(){ document.getElementById('authMsg').textContent = ''; authModal.classList.add('open'); }
+  function fecharModal(){ authModal.classList.remove('open'); }
+
+  function setModo(m){
+    authMode = m;
+    document.getElementById('modalTitle').textContent = m === 'login' ? 'Entrar' : 'Criar conta';
+    document.getElementById('modalSub').textContent = m === 'login'
+      ? 'Acesse sua conta Cats & Cats.'
+      : 'Crie sua conta para comprar e ler.';
+    document.getElementById('authSubmit').textContent = m === 'login' ? 'Entrar' : 'Criar conta';
+    document.getElementById('authFoot').innerHTML = m === 'login'
+      ? 'Não tem conta? <button class="link-btn" id="authSwitch">Criar conta</button>'
+      : 'Já tem conta? <button class="link-btn" id="authSwitch">Entrar</button>';
+  }
+
+  function traduzErro(msg){
+    if (/Invalid login credentials/i.test(msg)) return 'Email ou senha incorretos.';
+    if (/already registered/i.test(msg)) return 'Esse email já tem conta. Tente entrar.';
+    if (/at least 6 characters/i.test(msg)) return 'A senha precisa ter pelo menos 6 caracteres.';
+    if (/valid email/i.test(msg)) return 'Digite um email válido.';
+    return 'Erro: ' + msg;
+  }
+
+  function atualizarUI(session){
+    sessaoAtual = session;
+    if (session && session.user){
+      authArea.innerHTML = '<span class="user-chip"><strong></strong><button class="link-btn" id="logoutBtn">Sair</button></span>';
+      authArea.querySelector('strong').textContent = session.user.email;
+    } else {
+      authArea.innerHTML = '<button class="auth-btn" id="authBtn">Entrar</button>';
+    }
+  }
+
+  // Cliques por delegação — funcionam na hora, sem depender do Supabase responder
+  document.addEventListener('click', (e) => {
+    const id = e.target && e.target.id;
+    if (id === 'authBtn') abrirModal();
+    else if (id === 'logoutBtn') sb.auth.signOut();
+    else if (id === 'authSwitch') setModo(authMode === 'login' ? 'signup' : 'login');
+  });
+
+  document.getElementById('authSubmit').addEventListener('click', async () => {
+    const email = document.getElementById('authEmail').value.trim();
+    const senha = document.getElementById('authPass').value;
+    const msg = document.getElementById('authMsg');
+    msg.className = 'modal-msg';
+    if (!email || !senha){ msg.classList.add('err'); msg.textContent = 'Preencha email e senha.'; return; }
+    msg.textContent = 'Aguarde...';
+    try {
+      const res = authMode === 'login'
+        ? await sb.auth.signInWithPassword({ email, password: senha })
+        : await sb.auth.signUp({ email, password: senha });
+      if (res.error){
+        msg.classList.add('err'); msg.textContent = traduzErro(res.error.message);
+      } else {
+        msg.classList.add('ok');
+        msg.textContent = authMode === 'login' ? 'Bem-vindo!' : 'Conta criada!';
+        setTimeout(fecharModal, 700);
+      }
+    } catch (err) {
+      msg.classList.add('err'); msg.textContent = 'Erro de conexão. Tente de novo.';
+    }
+  });
+
+  document.getElementById('modalClose').addEventListener('click', fecharModal);
+  authModal.addEventListener('click', (e) => { if (e.target === authModal) fecharModal(); });
+  setModo('login');
+  sb.auth.onAuthStateChange((_evento, session) => atualizarUI(session));
+
+  // ===== Botões de compra/assinatura: exige login, depois chama a função criar-checkout =====
+  document.querySelectorAll('.buy, .plan .btn').forEach(b => b.addEventListener('click', async (ev) => {
+    ev.preventDefault();
+    if (!sessaoAtual){ abrirModal(); return; }
+    const itemId = b.dataset.item;
+    if (!itemId) return;
+    const textoOriginal = b.textContent;
+    b.textContent = 'Aguarde...';
+    b.style.pointerEvents = 'none';
+    try {
+      const { data, error } = await sb.functions.invoke('criar-checkout', { body: { itemId } });
+      if (error) throw error;
+      if (data && data.url) {
+        window.location.href = data.url;
+        return;
+      }
+      alert('Não foi possível iniciar o pagamento. Tente de novo.');
+    } catch (e) {
+      alert('Erro ao iniciar o pagamento. Tente de novo.');
+    }
+    b.textContent = textoOriginal;
+    b.style.pointerEvents = '';
+  }));
+</script>
+</body>
+</html>
