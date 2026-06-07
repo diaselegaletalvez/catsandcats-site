@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Suporte — Cats &amp; Cats</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Albert+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #111111;
+    --muted: #555555;
+    --line: #e5e5e5;
+    --accent: #111111;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0d0d0d;
+      --fg: #f2f2f2;
+      --muted: #a8a8a8;
+      --line: #262626;
+      --accent: #f2f2f2;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Albert Sans", system-ui, -apple-system, sans-serif;
+    line-height: 1.7;
+    font-size: 17px;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+  a { color: var(--accent); }
+  .back {
+    display: inline-block;
+    font-size: 14px;
+    text-decoration: none;
+    color: var(--muted);
+    margin-bottom: 40px;
+    letter-spacing: 0.02em;
+  }
+  .back:hover { color: var(--fg); }
+  h1 {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(32px, 6vw, 48px);
+    line-height: 1.1;
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+  }
+  .lede { color: var(--muted); margin: 0 0 40px; font-size: 18px; }
+  .contact-card {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 24px 26px;
+    margin: 0 0 48px;
+  }
+  .contact-card .label { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .contact-card .email { font-family: "Fraunces", Georgia, serif; font-size: 24px; font-weight: 600; }
+  .contact-card .resp { font-size: 14px; color: var(--muted); margin-top: 10px; }
+  h2 {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 600;
+    font-size: 22px;
+    margin: 40px 0 18px;
+    letter-spacing: -0.01em;
+  }
+  .faq { border-top: 1px solid var(--line); }
+  .faq-item { border-bottom: 1px solid var(--line); padding: 18px 0; }
+  .faq-q { font-weight: 600; margin: 0 0 6px; }
+  .faq-a { margin: 0; color: var(--muted); }
+  hr { border: none; border-top: 1px solid var(--line); margin: 56px 0 0; }
+  footer { margin-top: 32px; font-size: 14px; color: var(--muted); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="/">← Voltar para Cats &amp; Cats</a>
+    <h1>Suporte &amp; Ajuda</h1>
+    <p class="lede">Precisa de ajuda? A gente responde. 🐱</p>
+
+    <div class="contact-card">
+      <div class="label">Fale com a gente</div>
+      <div class="email">suporte.look360@gmail.com</div>
+      <div class="resp">Respondemos normalmente em até 48 horas úteis.</div>
+    </div>
+
+    <h2>Perguntas frequentes</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <p class="faq-q">Como acesso os quadrinhos que comprei?</p>
+        <p class="faq-a">Abra o app, faça login com a mesma conta usada na compra e vá até a
+        aba <strong>Biblioteca</strong>. Tudo o que você adquiriu aparece lá pra leitura.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">Onde eu faço as compras?</p>
+        <p class="faq-a">As compras são feitas no nosso site,
+        <a href="https://catsandcats.com.br">catsandcats.com.br</a>. Depois do pagamento
+        confirmado, o conteúdo aparece automaticamente na sua biblioteca do app.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">Comprei mas o item não apareceu. E agora?</p>
+        <p class="faq-a">A liberação acontece após a confirmação do pagamento, o que pode
+        levar alguns minutos. Se passar disso e o item não aparecer, fale com a gente pelo
+        e-mail acima com o seu nome e a data da compra.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">Como gerencio ou cancelo minha assinatura?</p>
+        <p class="faq-a">Você pode ver a situação do seu plano na sua conta. Para alterar ou
+        cancelar uma assinatura, entre em contato pelo e-mail de suporte.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">Esqueci minha senha.</p>
+        <p class="faq-a">Na tela de login, use a opção de recuperação de senha para receber
+        as instruções no seu e-mail cadastrado.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">Em quais dispositivos posso ler?</p>
+        <p class="faq-a">Você pode ler no app (iPhone) e também acessar sua biblioteca pelo
+        site, sempre logando com a mesma conta.</p>
+      </div>
+    </div>
+
+    <hr />
+    <footer>© 2026 Cats &amp; Cats. Todos os direitos reservados.</footer>
+  </div>
+</body>
+</html>
