@@ -171,6 +171,23 @@
     color: var(--muted); line-height: 1; }
   .modal-close:hover { color: var(--ink); }
 
+  /* Biblioteca + leitor */
+  .lib-empty { color: var(--muted); }
+  .lib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 18px; }
+  .lib-card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .lib-cover { width: 100%; aspect-ratio: 3/4; object-fit: cover; background: var(--line); display: block; }
+  .lib-card .b { padding: 12px 14px; }
+  .lib-card h3 { font-size: 1rem; margin: 0 0 10px; }
+  .lib-card .btn { width: 100%; text-align: center; }
+  .reader-bg { position: fixed; inset: 0; background: rgba(0,0,0,.93); z-index: 200; overflow-y: auto; display: none; }
+  .reader-bg.open { display: block; }
+  .reader-top { position: sticky; top: 0; display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 20px; background: rgba(0,0,0,.6); backdrop-filter: blur(6px); color: #fff; }
+  .reader-top h3 { margin: 0; font-size: 1rem; }
+  .reader-top button { background: none; border: 1px solid #555; color: #fff; border-radius: 8px; padding: 6px 14px; cursor: pointer; }
+  .reader-pages { max-width: 800px; margin: 0 auto; padding: 10px 0 60px; }
+  .reader-pages img { width: 100%; display: block; }
+
   /* reveal */
   .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
   .reveal.in { opacity: 1; transform: none; }
@@ -183,6 +200,7 @@
     <a href="#" class="brand"><span class="mark">C</span> Cats &amp; Cats</a>
     <nav class="nav-links">
       <a href="#loja">Loja</a>
+      <a href="#biblioteca">Biblioteca</a>
       <a href="#planos">Planos</a>
       <a href="#sobre">Sobre</a>
       <button class="toggle" id="themeToggle" aria-label="Alternar tema">
@@ -251,6 +269,16 @@
     </div>
   </section>
 
+  <section class="sec" id="biblioteca">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <h2>Minha biblioteca</h2>
+        <span>Os comics que você comprou · leia online</span>
+      </div>
+      <div id="libContent"><p class="lib-empty">Entre na sua conta para ver sua biblioteca.</p></div>
+    </div>
+  </section>
+
   <section class="sec" id="planos">
     <div class="wrap">
       <div class="sec-head reveal">
@@ -301,16 +329,25 @@
       </div>
       <div class="foot-links">
         <a href="#loja">Loja</a>
+        <a href="#biblioteca">Biblioteca</a>
         <a href="#planos">Planos</a>
         <a href="#sobre">Sobre</a>
       </div>
     </div>
     <div class="copy">
       <span>© 2026 Cats &amp; Cats</span>
-      <span>catsandcatsstore.com.br</span>
+      <span>catsandcats.com.br</span>
     </div>
   </div>
 </footer>
+
+<div class="reader-bg" id="readerBg">
+  <div class="reader-top">
+    <h3 id="readerTitle"></h3>
+    <button id="readerClose">Fechar</button>
+  </div>
+  <div class="reader-pages" id="readerPages"></div>
+</div>
 
 <div class="modal-bg" id="authModal">
   <div class="modal">
@@ -393,6 +430,7 @@
     } else {
       authArea.innerHTML = '<button class="auth-btn" id="authBtn">Entrar</button>';
     }
+    carregarBiblioteca(session);
   }
 
   // Cliques por delegação — funcionam na hora, sem depender do Supabase responder
@@ -430,6 +468,70 @@
   authModal.addEventListener('click', (e) => { if (e.target === authModal) fecharModal(); });
   setModo('login');
   sb.auth.onAuthStateChange((_evento, session) => atualizarUI(session));
+
+  // ===== Biblioteca (comics comprados) =====
+  async function carregarBiblioteca(session){
+    const box = document.getElementById('libContent');
+    if (!box) return;
+    if (!session || !session.user){
+      box.innerHTML = '<p class="lib-empty">Entre na sua conta para ver sua biblioteca.</p>';
+      return;
+    }
+    box.innerHTML = '<p class="lib-empty">Carregando...</p>';
+    try {
+      const { data: lib, error } = await sb.from('user_library').select('item_id').eq('user_id', session.user.id);
+      if (error) throw error;
+      if (!lib || lib.length === 0){
+        box.innerHTML = '<p class="lib-empty">Você ainda não tem comics. Compre na loja para começar!</p>';
+        return;
+      }
+      const slugs = lib.map(r => r.item_id);
+      const { data: comics } = await sb.from('comics').select('id,title,slug,cover_url').in('slug', slugs);
+      if (!comics || comics.length === 0){
+        box.innerHTML = '<p class="lib-empty">Você ainda não tem comics.</p>';
+        return;
+      }
+      const grid = document.createElement('div');
+      grid.className = 'lib-grid';
+      comics.forEach(c => {
+        const card = document.createElement('article');
+        card.className = 'lib-card';
+        card.innerHTML = '<img class="lib-cover" src="' + (c.cover_url || '') + '" alt=""><div class="b"><h3></h3><button class="btn btn-primary">Ler</button></div>';
+        card.querySelector('h3').textContent = c.title;
+        card.querySelector('button').addEventListener('click', () => abrirLeitor(c.id, c.title));
+        grid.appendChild(card);
+      });
+      box.innerHTML = '';
+      box.appendChild(grid);
+    } catch (e) {
+      box.innerHTML = '<p class="lib-empty">Não foi possível carregar sua biblioteca agora.</p>';
+    }
+  }
+
+  // ===== Leitor online =====
+  async function abrirLeitor(comicId, title){
+    const bg = document.getElementById('readerBg');
+    document.getElementById('readerTitle').textContent = title;
+    const pagesBox = document.getElementById('readerPages');
+    pagesBox.innerHTML = '<p style="color:#aaa;text-align:center;padding:40px;">Carregando...</p>';
+    bg.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    try {
+      const { data: pages } = await sb.from('comic_pages').select('image_url,page_number').eq('comic_id', comicId).order('page_number', { ascending: true });
+      if (!pages || pages.length === 0){
+        pagesBox.innerHTML = '<p style="color:#aaa;text-align:center;padding:40px;">Esse comic ainda não tem páginas.</p>';
+        return;
+      }
+      pagesBox.innerHTML = '';
+      pages.forEach(p => { const img = document.createElement('img'); img.src = p.image_url; pagesBox.appendChild(img); });
+    } catch (e) {
+      pagesBox.innerHTML = '<p style="color:#aaa;text-align:center;padding:40px;">Erro ao carregar as páginas.</p>';
+    }
+  }
+  document.getElementById('readerClose').addEventListener('click', () => {
+    document.getElementById('readerBg').classList.remove('open');
+    document.body.style.overflow = '';
+  });
 
   // ===== Botões de compra/assinatura: exige login, depois chama a função criar-checkout =====
   document.querySelectorAll('.buy, .plan .btn').forEach(b => b.addEventListener('click', async (ev) => {
