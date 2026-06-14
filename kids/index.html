@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Cats &amp; Cats — Mundo Kids 🐱</title>
-<link rel="preconnect" href="httpxs://fonts.googleapis.com" />
+<title>Cats &amp; Cats — Mundo Kids</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
 <style>
@@ -175,12 +175,62 @@
   .hero-art {
     position: relative; z-index: 2; display: grid; place-items: center;
   }
-  .hero-cat {
-    font-size: clamp(120px, 18vw, 220px);
-    animation: bob 3s ease-in-out infinite;
-    filter: drop-shadow(0 16px 20px rgba(0,0,0,.2));
+  .hero-photo {
+    width: clamp(220px, 30vw, 360px);
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 28px;
+    border: 6px solid #fff;
+    box-shadow: 0 18px 40px rgba(0,0,0,.28);
+    transform: rotate(-3deg);
+    animation: bob 4s ease-in-out infinite;
   }
-  @keyframes bob { 50% { transform: translateY(-16px) rotate(-4deg); } }
+  @keyframes bob { 50% { transform: rotate(-3deg) translateY(-12px); } }
+
+  /* ===== Carrossel ===== */
+  .carousel { position: relative; margin: 28px 5vw 0; }
+  .carousel .hero { margin: 0; }
+  .carousel .slide {
+    position: absolute; inset: 0;
+    opacity: 0; pointer-events: none;
+    transition: opacity .6s ease;
+  }
+  .carousel .slide.active {
+    position: relative;
+    opacity: 1; pointer-events: auto;
+  }
+  .slide.s2 {
+    background:
+      radial-gradient(circle at 80% 20%, rgba(255,127,182,.45), transparent 42%),
+      linear-gradient(120deg, var(--teal), var(--sky));
+  }
+  .slide.s3 {
+    background:
+      radial-gradient(circle at 20% 20%, rgba(255,210,63,.5), transparent 45%),
+      linear-gradient(120deg, var(--purple), var(--coral));
+  }
+  .car-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 44px; height: 44px; border-radius: 999px; border: none;
+    background: rgba(255,255,255,.85); color: var(--ink);
+    font-size: 28px; line-height: 1; font-family: "Fredoka"; cursor: pointer;
+    z-index: 5; box-shadow: 0 4px 12px rgba(0,0,0,.18);
+    display: grid; place-items: center; transition: transform .12s;
+  }
+  .car-arrow:hover { transform: translateY(-50%) scale(1.12); }
+  .car-arrow.prev { left: 14px; }
+  .car-arrow.next { right: 14px; }
+  .dots {
+    position: absolute; bottom: 16px; left: 0; right: 0;
+    display: flex; gap: 8px; justify-content: center; z-index: 5;
+  }
+  .dots button {
+    width: 11px; height: 11px; border-radius: 999px; border: none;
+    background: rgba(255,255,255,.55); cursor: pointer; padding: 0;
+    transition: all .25s;
+  }
+  .dots button.active { background: #fff; width: 26px; }
+  @media (max-width: 860px) { .car-arrow { display: none; } }
 
   /* ===== Category cards ===== */
   .cats-row {
@@ -289,21 +339,23 @@
   /* ===== Load animation ===== */
   .reveal { opacity: 0; transform: translateY(20px); animation: rise .6s ease forwards; }
   @keyframes rise { to { opacity: 1; transform: none; } }
+  .cat-card .emoji svg { display:block; margin:0 auto; }
+  .cover .cover-paw { width:92px; height:92px; }
 </style>
 </head>
 <body>
 
-  <div class="marquee"><span>🚚 Entrega para todo o Brasil &nbsp;•&nbsp; 🐱 Quadrinhos novos toda semana &nbsp;•&nbsp; ✨ Frete grátis acima de R$99 &nbsp;•&nbsp; 🎉 Bem-vindo ao Mundo Kids da Cats &amp; Cats &nbsp;•&nbsp; 🚚 Entrega para todo o Brasil &nbsp;•&nbsp; 🐱 Quadrinhos novos toda semana &nbsp;•&nbsp; ✨ Frete grátis acima de R$99</span></div>
+  <div class="marquee"><span>Entrega para todo o Brasil &nbsp;•&nbsp; Quadrinhos novos toda semana &nbsp;•&nbsp; Frete grátis acima de R$99 &nbsp;•&nbsp; Bem-vindo ao Mundo Kids da Cats &amp; Cats &nbsp;•&nbsp; Entrega para todo o Brasil &nbsp;•&nbsp; Quadrinhos novos toda semana &nbsp;•&nbsp; Frete grátis acima de R$99</span></div>
 
   <header>
-    <a class="logo" href="/"><span class="paw">🐾</span> Cats &amp; Cats</a>
+    <a class="logo" href="/"><span class="paw"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><circle cx="5.5" cy="11" r="2.1"/><circle cx="9.5" cy="7.4" r="2.2"/><circle cx="14.5" cy="7.4" r="2.2"/><circle cx="18.5" cy="11" r="2.1"/><path d="M12 12.4c2.8 0 5 2 5 4.3 0 1.7-1.6 2.4-3.2 1.9-1.1-.4-2.5-.4-3.6 0-1.6.5-3.2-.2-3.2-1.9 0-2.3 2.2-4.3 5-4.3z"/></svg></span> Cats &amp; Cats</a>
     <div class="search">
-      <span>🔍</span>
+      <span><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span>
       <input type="text" placeholder="Buscar quadrinhos, personagens, produtos..." />
     </div>
     <div class="icons">
-      <a class="icon-btn" href="#" title="Minha conta">👤</a>
-      <a class="icon-btn cart" href="#" title="Carrinho">🛒<span class="cart-count">0</span></a>
+      <a class="icon-btn" href="#" title="Minha conta"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></a>
+      <a class="icon-btn cart" href="#" title="Carrinho"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.6"/><circle cx="18" cy="20" r="1.6"/><path d="M2.5 3.5H5l2.4 12.2h10.3L20 7H6.2"/></svg><span class="cart-count">0</span></a>
     </div>
   </header>
 
@@ -316,38 +368,63 @@
     <div class="tab" data-tab>Contato</div>
   </nav>
 
-  <!-- HERO -->
-  <div class="hero reveal">
-    <span class="blob b1">⭐</span>
-    <span class="blob b2">🐟</span>
-    <div class="hero-text">
-      <span class="kicker">🎉 Novidade da semana</span>
-      <h1>Bem-vindo ao mundo<br>da Cats &amp; Cats!</h1>
-      <p>Quadrinhos, personagens e produtos cheios de cor pra você se divertir com a gente. 😸</p>
-      <a class="btn" href="#lancamentos">Ver quadrinhos</a>
-      <a class="btn alt" href="#promo">Promoções 🏷️</a>
+  <!-- HERO CARROSSEL -->
+  <div class="carousel reveal" id="carousel">
+    <!-- Slide 1 -->
+    <div class="hero slide s1 active">
+      <div class="hero-text">
+        <span class="kicker">Novidade da semana</span>
+        <h1>Bem-vindo ao mundo<br>da Cats &amp; Cats!</h1>
+        <p>Quadrinhos, personagens e produtos cheios de cor pra você se divertir.</p>
+        <a class="btn" href="#lancamentos">Ver quadrinhos</a>
+      </div>
+      <div class="hero-art"><img class="hero-photo" src="/gato-mascote.jpg" alt="Gato" /></div>
     </div>
-    <div class="hero-art"><div class="hero-cat">😺</div></div>
+    <!-- Slide 2 -->
+    <div class="hero slide s2">
+      <div class="hero-text">
+        <span class="kicker">Aproveite agora</span>
+        <h1>Frete grátis<br>acima de R$99!</h1>
+        <p>Receba seus quadrinhos em todo o Brasil sem pagar entrega.</p>
+        <a class="btn" href="#promo">Ver promoções</a>
+      </div>
+      <div class="hero-art"><img class="hero-photo" src="/gato-sacola.jpg" alt="Gato" /></div>
+    </div>
+    <!-- Slide 3 -->
+    <div class="hero slide s3">
+      <div class="hero-text">
+        <span class="kicker">Toda semana</span>
+        <h1>Quadrinhos novos<br>sempre chegando!</h1>
+        <p>Histórias inéditas da Cats &amp; Cats pra você não perder nenhuma aventura.</p>
+        <a class="btn" href="#lancamentos">Ver lançamentos</a>
+      </div>
+      <div class="hero-art"><img class="hero-photo" src="/gato-gibis.jpg" alt="Gato" /></div>
+    </div>
+    <!-- Setas -->
+    <button class="car-arrow prev" aria-label="Anterior">‹</button>
+    <button class="car-arrow next" aria-label="Próximo">›</button>
+    <!-- Bolinhas (criadas pelo JS) -->
+    <div class="dots"></div>
   </div>
 
   <!-- CATEGORY CARDS -->
   <div class="cats-row">
-    <div class="cat-card c1 reveal" style="animation-delay:.05s"><div class="emoji">📚</div><h3>Quadrinhos</h3><p>Veja todos</p></div>
-    <div class="cat-card c2 reveal" style="animation-delay:.1s"><div class="emoji">🐱</div><h3>Personagens</h3><p>Conheça a turma</p></div>
-    <div class="cat-card c3 reveal" style="animation-delay:.15s"><div class="emoji">🎁</div><h3>Produtos</h3><p>Camisas e mais</p></div>
-    <div class="cat-card c4 reveal" style="animation-delay:.2s"><div class="emoji">🏷️</div><h3>Promoções</h3><p>Ofertas do dia</p></div>
+    <div class="cat-card c1 reveal" style="animation-delay:.05s"><div class="emoji"><svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="#2B2440" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h6v17H6a2 2 0 0 0-2 2z"/><path d="M20 5a2 2 0 0 0-2-2h-6v17h6a2 2 0 0 1 2 2z"/></svg></div><h3>Quadrinhos</h3><p>Veja todos</p></div>
+    <div class="cat-card c2 reveal" style="animation-delay:.1s"><div class="emoji"><svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="#2B2440" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 4l3 4M19.5 4l-3 4"/><path d="M5 9c0-2 3-3 7-3s7 1 7 3v4.5a7 7 0 0 1-14 0z"/><circle cx="9.5" cy="12" r="1" fill="#2B2440"/><circle cx="14.5" cy="12" r="1" fill="#2B2440"/><path d="M12 13.5v1.5M9.8 16l2.2-.4 2.2.4"/></svg></div><h3>Personagens</h3><p>Conheça a turma</p></div>
+    <div class="cat-card c3 reveal" style="animation-delay:.15s"><div class="emoji"><svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="#2B2440" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3l3 2 3-2 5 3-2 4-2-1v9H8v-9l-2 1-2-4z"/></svg></div><h3>Produtos</h3><p>Camisas e mais</p></div>
+    <div class="cat-card c4 reveal" style="animation-delay:.2s"><div class="emoji"><svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="#2B2440" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h7l9 9-7 7-9-9z"/><circle cx="8.5" cy="8.5" r="1.3" fill="#2B2440"/></svg></div><h3>Promoções</h3><p>Ofertas do dia</p></div>
   </div>
 
   <!-- LANÇAMENTOS -->
   <section class="block" id="lancamentos">
     <div class="sec-head">
-      <h2>🆕 Lançamentos</h2>
-      <a href="#">Ver todos →</a>
+      <h2>Lançamentos</h2>
+      <a href="#">Ver todos</a>
     </div>
     <div class="grid">
       <div class="product reveal">
         <span class="badge">25% OFF</span><span class="free">FRETE GRÁTIS</span>
-        <div class="cover cov1">🐱</div>
+        <div class="cover cov1"><svg class="cover-paw" viewBox="0 0 24 24" fill="rgba(43,36,64,.42)" aria-hidden="true"><circle cx="5.5" cy="11" r="2.3"/><circle cx="9.5" cy="7.2" r="2.4"/><circle cx="14.5" cy="7.2" r="2.4"/><circle cx="18.5" cy="11" r="2.3"/><path d="M12 12.3c2.9 0 5.2 2.1 5.2 4.5 0 1.8-1.7 2.5-3.4 2-1.1-.4-2.6-.4-3.7 0-1.6.5-3.3-.2-3.3-2 0-2.4 2.3-4.5 5.2-4.5z"/></svg></div>
         <div class="product-body">
           <h3>Tico — Edição 1</h3>
           <div class="price"><span class="now">R$29,90</span><span class="old">R$39,90</span><span class="inst">12x de R$2,49</span></div>
@@ -356,7 +433,7 @@
       </div>
       <div class="product reveal" style="animation-delay:.05s">
         <span class="badge">20% OFF</span><span class="free">FRETE GRÁTIS</span>
-        <div class="cover cov2">😺</div>
+        <div class="cover cov2"><svg class="cover-paw" viewBox="0 0 24 24" fill="rgba(43,36,64,.42)" aria-hidden="true"><circle cx="5.5" cy="11" r="2.3"/><circle cx="9.5" cy="7.2" r="2.4"/><circle cx="14.5" cy="7.2" r="2.4"/><circle cx="18.5" cy="11" r="2.3"/><path d="M12 12.3c2.9 0 5.2 2.1 5.2 4.5 0 1.8-1.7 2.5-3.4 2-1.1-.4-2.6-.4-3.7 0-1.6.5-3.3-.2-3.3-2 0-2.4 2.3-4.5 5.2-4.5z"/></svg></div>
         <div class="product-body">
           <h3>Tico — Edição 2</h3>
           <div class="price"><span class="now">R$29,90</span><span class="old">R$37,90</span><span class="inst">12x de R$2,49</span></div>
@@ -365,7 +442,7 @@
       </div>
       <div class="product reveal" style="animation-delay:.1s">
         <span class="badge">NOVO</span>
-        <div class="cover cov3">😸</div>
+        <div class="cover cov3"><svg class="cover-paw" viewBox="0 0 24 24" fill="rgba(43,36,64,.42)" aria-hidden="true"><circle cx="5.5" cy="11" r="2.3"/><circle cx="9.5" cy="7.2" r="2.4"/><circle cx="14.5" cy="7.2" r="2.4"/><circle cx="18.5" cy="11" r="2.3"/><path d="M12 12.3c2.9 0 5.2 2.1 5.2 4.5 0 1.8-1.7 2.5-3.4 2-1.1-.4-2.6-.4-3.7 0-1.6.5-3.3-.2-3.3-2 0-2.4 2.3-4.5 5.2-4.5z"/></svg></div>
         <div class="product-body">
           <h3>As Aventuras do Tico</h3>
           <div class="price"><span class="now">R$34,90</span><span class="inst">12x de R$2,91</span></div>
@@ -374,7 +451,7 @@
       </div>
       <div class="product reveal" style="animation-delay:.15s">
         <span class="badge">NOVO</span>
-        <div class="cover cov4">🐈</div>
+        <div class="cover cov4"><svg class="cover-paw" viewBox="0 0 24 24" fill="rgba(43,36,64,.42)" aria-hidden="true"><circle cx="5.5" cy="11" r="2.3"/><circle cx="9.5" cy="7.2" r="2.4"/><circle cx="14.5" cy="7.2" r="2.4"/><circle cx="18.5" cy="11" r="2.3"/><path d="M12 12.3c2.9 0 5.2 2.1 5.2 4.5 0 1.8-1.7 2.5-3.4 2-1.1-.4-2.6-.4-3.7 0-1.6.5-3.3-.2-3.3-2 0-2.4 2.3-4.5 5.2-4.5z"/></svg></div>
         <div class="product-body">
           <h3>Tico no Espaço</h3>
           <div class="price"><span class="now">R$34,90</span><span class="inst">12x de R$2,91</span></div>
@@ -387,13 +464,13 @@
   <!-- DESTAQUES / PROMO -->
   <section class="block" id="promo">
     <div class="sec-head">
-      <h2>⭐ Em destaque</h2>
-      <a href="#">Ver todos →</a>
+      <h2>Em destaque</h2>
+      <a href="#">Ver todos</a>
     </div>
     <div class="grid">
       <div class="product reveal">
         <span class="badge">30% OFF</span><span class="free">FRETE GRÁTIS</span>
-        <div class="cover cov5">👕</div>
+        <div class="cover cov5"><svg class="cover-paw" viewBox="0 0 24 24" fill="rgba(43,36,64,.42)" aria-hidden="true"><circle cx="5.5" cy="11" r="2.3"/><circle cx="9.5" cy="7.2" r="2.4"/><circle cx="14.5" cy="7.2" r="2.4"/><circle cx="18.5" cy="11" r="2.3"/><path d="M12 12.3c2.9 0 5.2 2.1 5.2 4.5 0 1.8-1.7 2.5-3.4 2-1.1-.4-2.6-.4-3.7 0-1.6.5-3.3-.2-3.3-2 0-2.4 2.3-4.5 5.2-4.5z"/></svg></div>
         <div class="product-body">
           <h3>Camiseta do Tico</h3>
           <div class="price"><span class="now">R$55,90</span><span class="old">R$79,90</span><span class="inst">12x de R$4,66</span></div>
@@ -402,7 +479,7 @@
       </div>
       <div class="product reveal" style="animation-delay:.05s">
         <span class="badge">15% OFF</span>
-        <div class="cover cov6">☕</div>
+        <div class="cover cov6"><svg class="cover-paw" viewBox="0 0 24 24" fill="rgba(43,36,64,.42)" aria-hidden="true"><circle cx="5.5" cy="11" r="2.3"/><circle cx="9.5" cy="7.2" r="2.4"/><circle cx="14.5" cy="7.2" r="2.4"/><circle cx="18.5" cy="11" r="2.3"/><path d="M12 12.3c2.9 0 5.2 2.1 5.2 4.5 0 1.8-1.7 2.5-3.4 2-1.1-.4-2.6-.4-3.7 0-1.6.5-3.3-.2-3.3-2 0-2.4 2.3-4.5 5.2-4.5z"/></svg></div>
         <div class="product-body">
           <h3>Caneca Gatinho</h3>
           <div class="price"><span class="now">R$42,90</span><span class="old">R$49,90</span><span class="inst">12x de R$3,57</span></div>
@@ -411,7 +488,7 @@
       </div>
       <div class="product reveal" style="animation-delay:.1s">
         <span class="badge">COMBO</span><span class="free">FRETE GRÁTIS</span>
-        <div class="cover cov1">📦</div>
+        <div class="cover cov1"><svg class="cover-paw" viewBox="0 0 24 24" fill="rgba(43,36,64,.42)" aria-hidden="true"><circle cx="5.5" cy="11" r="2.3"/><circle cx="9.5" cy="7.2" r="2.4"/><circle cx="14.5" cy="7.2" r="2.4"/><circle cx="18.5" cy="11" r="2.3"/><path d="M12 12.3c2.9 0 5.2 2.1 5.2 4.5 0 1.8-1.7 2.5-3.4 2-1.1-.4-2.6-.4-3.7 0-1.6.5-3.3-.2-3.3-2 0-2.4 2.3-4.5 5.2-4.5z"/></svg></div>
         <div class="product-body">
           <h3>Combo Tico Completo</h3>
           <div class="price"><span class="now">R$99,90</span><span class="old">R$139,90</span><span class="inst">12x de R$8,32</span></div>
@@ -420,7 +497,7 @@
       </div>
       <div class="product reveal" style="animation-delay:.15s">
         <span class="badge">ASSINATURA</span>
-        <div class="cover cov2">🌟</div>
+        <div class="cover cov2"><svg class="cover-paw" viewBox="0 0 24 24" fill="rgba(43,36,64,.42)" aria-hidden="true"><circle cx="5.5" cy="11" r="2.3"/><circle cx="9.5" cy="7.2" r="2.4"/><circle cx="14.5" cy="7.2" r="2.4"/><circle cx="18.5" cy="11" r="2.3"/><path d="M12 12.3c2.9 0 5.2 2.1 5.2 4.5 0 1.8-1.7 2.5-3.4 2-1.1-.4-2.6-.4-3.7 0-1.6.5-3.3-.2-3.3-2 0-2.4 2.3-4.5 5.2-4.5z"/></svg></div>
         <div class="product-body">
           <h3>Plano Pro Kids</h3>
           <div class="price"><span class="now">R$30,00</span><span class="inst">por mês</span></div>
@@ -432,8 +509,8 @@
 
   <!-- NEWSLETTER -->
   <div class="news reveal">
-    <h2>📬 Receba as promoções!</h2>
-    <p>Cadastre seu e-mail e seja o primeiro a saber das novidades do Tico. 🐱</p>
+    <h2>Receba as promoções!</h2>
+    <p>Cadastre seu e-mail e seja o primeiro a saber das novidades do Tico. </p>
     <div class="news-form">
       <input type="email" placeholder="seu@email.com" />
       <button class="btn">Quero receber!</button>
@@ -442,7 +519,7 @@
 
   <!-- FOOTER -->
   <footer>
-    <a class="logo" href="/"><span class="paw">🐾</span> Cats &amp; Cats</a>
+    <a class="logo" href="/"><span class="paw"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><circle cx="5.5" cy="11" r="2.1"/><circle cx="9.5" cy="7.4" r="2.2"/><circle cx="14.5" cy="7.4" r="2.2"/><circle cx="18.5" cy="11" r="2.1"/><path d="M12 12.4c2.8 0 5 2 5 4.3 0 1.7-1.6 2.4-3.2 1.9-1.1-.4-2.5-.4-3.6 0-1.6.5-3.2-.2-3.2-1.9 0-2.3 2.2-4.3 5-4.3z"/></svg></span> Cats &amp; Cats</a>
     <div class="foot-links">
       <a href="/">Início</a>
       <a href="#lancamentos">Quadrinhos</a>
@@ -451,7 +528,7 @@
       <a href="/termos.html">Termos</a>
       <a href="https://instagram.com" target="_blank">Instagram</a>
     </div>
-    <div class="foot-copy">© 2026 Cats &amp; Cats. Todos os direitos reservados. 🐾</div>
+    <div class="foot-copy">© 2026 Cats &amp; Cats. Todos os direitos reservados. </div>
   </footer>
 
   <script>
@@ -469,10 +546,43 @@
       b.addEventListener('click', function () {
         count++;
         document.querySelector('.cart-count').textContent = count;
-        b.textContent = 'Adicionado! ✓';
+        b.textContent = 'Adicionado!';
         setTimeout(function () { b.textContent = 'Comprar'; }, 1200);
       });
     });
+    // Carrossel de banners (rotação automática + setas + bolinhas)
+    (function () {
+      var carousel = document.getElementById('carousel');
+      if (!carousel) return;
+      var slides = carousel.querySelectorAll('.slide');
+      var dotsBox = carousel.querySelector('.dots');
+      var i = 0, timer;
+      if (!slides.length) return;
+
+      slides.forEach(function (s, idx) {
+        var d = document.createElement('button');
+        if (idx === 0) d.classList.add('active');
+        d.setAttribute('aria-label', 'Banner ' + (idx + 1));
+        d.addEventListener('click', function () { go(idx); reset(); });
+        dotsBox.appendChild(d);
+      });
+      var dots = dotsBox.querySelectorAll('button');
+
+      function go(n) {
+        slides[i].classList.remove('active');
+        dots[i].classList.remove('active');
+        i = (n + slides.length) % slides.length;
+        slides[i].classList.add('active');
+        dots[i].classList.add('active');
+      }
+      function next() { go(i + 1); }
+      function prev() { go(i - 1); }
+      function reset() { clearInterval(timer); timer = setInterval(next, 4500); }
+
+      carousel.querySelector('.next').addEventListener('click', function () { next(); reset(); });
+      carousel.querySelector('.prev').addEventListener('click', function () { prev(); reset(); });
+      reset();
+    })();
   </script>
 </body>
 </html>
