@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Meu Painel — Cats &amp; Cats</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Albert+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{--cream:#FFF4E0;--ink:#1a1a1a;--muted:#666;--line:#e8ddc8;--coral:#FF6B5B;--teal:#2EC4B6;--white:#fff}
+  @media (prefers-color-scheme:dark){:root{--cream:#0d0d0d;--ink:#f2f2f2;--muted:#a8a8a8;--line:#262626;--white:#161616}}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Albert Sans",system-ui,sans-serif;background:var(--cream);color:var(--ink);line-height:1.6}
+  a{color:var(--coral);text-decoration:none}
+  header{display:flex;align-items:center;justify-content:space-between;padding:18px 5vw;border-bottom:2px solid var(--line)}
+  .logo{font-family:"Fraunces",serif;font-weight:700;font-size:24px;color:var(--coral);display:flex;align-items:center;gap:6px}
+  .wrap{max-width:900px;margin:0 auto;padding:40px 5vw 90px}
+  h1{font-family:"Fraunces",serif;font-weight:700;font-size:34px;margin-bottom:6px}
+  .sub{color:var(--muted);margin-bottom:32px}
+  .btn{font-family:"Fraunces",serif;font-weight:600;font-size:15px;padding:11px 22px;border-radius:999px;border:none;cursor:pointer;background:var(--coral);color:#fff;transition:transform .12s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn.ghost{background:transparent;color:var(--muted);border:2px solid var(--line)}
+  /* login */
+  #login{max-width:380px;margin:60px auto;background:var(--white);border:2px solid var(--line);border-radius:20px;padding:32px}
+  #login h2{font-family:"Fraunces",serif;font-size:24px;margin-bottom:6px}
+  #login p{color:var(--muted);font-size:14px;margin-bottom:20px}
+  #login input{width:100%;padding:12px 14px;border:2px solid var(--line);border-radius:12px;margin-bottom:12px;font-family:inherit;font-size:15px;background:var(--cream);color:var(--ink)}
+  #login .btn{width:100%}
+  .msg{font-size:14px;margin-top:12px;min-height:18px}
+  /* dash */
+  .card{background:var(--white);border:2px solid var(--line);border-radius:18px;padding:22px 24px;margin-bottom:24px}
+  .card h3{font-family:"Fraunces",serif;font-size:18px;margin-bottom:12px}
+  .row{display:flex;justify-content:space-between;padding:7px 0;font-size:15px;border-bottom:1px solid var(--line)}
+  .row:last-child{border:none}
+  .row .k{color:var(--muted)}
+  .plan-badge{display:inline-block;background:var(--teal);color:#fff;font-family:"Fraunces";font-weight:600;font-size:13px;padding:4px 12px;border-radius:999px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px}
+  .comic{background:var(--cream);border:2px solid var(--line);border-radius:14px;overflow:hidden}
+  .comic .cov{height:160px;display:grid;place-items:center;font-size:56px;background:linear-gradient(135deg,#FFE9A8,#FFD23F);overflow:hidden}
+  .comic .cov img{width:100%;height:100%;object-fit:cover}
+  .comic .t{padding:10px 12px;font-weight:700;font-size:14px}
+  .empty{color:var(--muted);font-size:15px;padding:10px 0}
+  .hide{display:none}
+</style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="/"><span>🐾</span> Cats &amp; Cats</a>
+    <button id="logoutBtn" class="btn ghost hide" onclick="sair()">Sair</button>
+  </header>
+
+  <div class="wrap">
+    <!-- LOGIN -->
+    <div id="login">
+      <h2>Meu Painel</h2>
+      <p>Entre com a mesma conta do app pra ver sua biblioteca e seu plano.</p>
+      <input id="email" type="email" placeholder="seu@email.com" />
+      <input id="senha" type="password" placeholder="sua senha" />
+      <button class="btn" onclick="entrar()">Entrar</button>
+      <div class="msg" id="loginMsg"></div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dash" class="hide">
+      <h1>Olá! 🐱</h1>
+      <p class="sub" id="ola"></p>
+
+      <div class="card">
+        <h3>Minha conta</h3>
+        <div class="row"><span class="k">E-mail</span><span id="dEmail"></span></div>
+        <div class="row"><span class="k">Plano</span><span id="dPlano"></span></div>
+      </div>
+
+      <div class="card">
+        <h3>Minha Biblioteca</h3>
+        <div id="bib" class="grid"></div>
+        <div id="bibVazia" class="empty hide">Você ainda não tem quadrinhos. <a href="/adulto/">Ir à loja →</a></div>
+      </div>
+
+      <a href="/kids/" class="btn" style="margin-right:8px">Mundo Kids</a>
+      <a href="/adulto/" class="btn ghost">Mundo Adulto</a>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SB_URL = 'https://urguoedgajhykkczatcx.supabase.co';
+    const SB_KEY = 'sb_publishable_53he8rq2bdCmlEVyHf0Q3Q_Mnl1jim_';
+    const sb = supabase.createClient(SB_URL, SB_KEY);
+
+    const $ = (id) => document.getElementById(id);
+    let sessao = null;
+
+    sb.auth.onAuthStateChange((_e, s) => { sessao = s; render(); });
+
+    async function render(){
+      if(!sessao){ const { data } = await sb.auth.getSession(); sessao = data.session; }
+      if(sessao && sessao.user){ mostrarDash(sessao.user); } else { mostrarLogin(); }
+    }
+    function mostrarLogin(){
+      $('login').classList.remove('hide');
+      $('dash').classList.add('hide');
+      $('logoutBtn').classList.add('hide');
+    }
+    async function entrar(){
+      $('loginMsg').textContent = 'Entrando...';
+      const { error } = await sb.auth.signInWithPassword({ email: $('email').value.trim(), password: $('senha').value });
+      if(error){ $('loginMsg').textContent = 'E-mail ou senha incorretos.'; }
+      else { $('loginMsg').textContent = ''; }
+    }
+    async function sair(){ await sb.auth.signOut(); sessao = null; render(); }
+
+    async function mostrarDash(user){
+      $('login').classList.add('hide');
+      $('dash').classList.remove('hide');
+      $('logoutBtn').classList.remove('hide');
+      $('dEmail').textContent = user.email || '—';
+
+      // Perfil + plano
+      try{
+        const { data: p } = await sb.from('profiles').select('name,first_name,plan,plan_until').eq('id', user.id).single();
+        const nome = (p && (p.first_name || p.name)) ? (p.first_name || p.name) : 'leitor(a)';
+        $('ola').textContent = 'Que bom te ver por aqui, ' + nome + '!';
+        const plano = (p && p.plan) ? p.plan : 'free';
+        const nomes = { free:'Gratuito', pro:'Pro', family:'Family' };
+        let txt = '<span class="plan-badge">' + (nomes[plano] || plano) + '</span>';
+        if(p && p.plan_until && plano !== 'free'){ txt += ' <span style="color:var(--muted);font-size:13px">até ' + new Date(p.plan_until).toLocaleDateString('pt-BR') + '</span>'; }
+        $('dPlano').innerHTML = txt;
+      }catch(e){ $('dPlano').textContent = 'Gratuito'; }
+
+      // Biblioteca
+      try{
+        const { data: lib } = await sb.from('user_library').select('item_id').eq('user_id', user.id);
+        const slugs = (lib || []).map(r => r.item_id).filter(Boolean);
+        if(slugs.length === 0){ $('bibVazia').classList.remove('hide'); return; }
+        const { data: comics } = await sb.from('comics').select('slug,title,cover_url').in('slug', slugs);
+        const bib = $('bib');
+        bib.innerHTML = '';
+        (comics || []).forEach(c => {
+          const cov = c.cover_url ? '<img src="'+c.cover_url+'" alt="">' : '🐱';
+          bib.insertAdjacentHTML('beforeend',
+            '<div class="comic"><div class="cov">'+cov+'</div><div class="t">'+(c.title||c.slug)+'</div></div>');
+        });
+      }catch(e){ $('bibVazia').classList.remove('hide'); }
+    }
+
+    render();
+  </script>
+</body>
+</html>
