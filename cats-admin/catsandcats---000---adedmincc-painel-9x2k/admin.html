@@ -72,9 +72,15 @@
       </div>
     </div>
 
-    <!-- CADASTRAR COMIC -->
+    <!-- CADASTRAR CONTEÚDO -->
     <div class="card">
-      <h2>Cadastrar comic</h2>
+      <h2>Cadastrar conteúdo</h2>
+      <label for="c_tipo">Tipo de conteúdo</label>
+      <select id="c_tipo">
+        <option value="livro_kids">Livro Kids</option>
+        <option value="livro_adulto">Livro (Adulto)</option>
+        <option value="jogo">Jogo</option>
+      </select>
       <div class="row">
         <div><label for="c_title">Título</label><input id="c_title"></div>
         <div><label for="c_slug">Slug (ex: tico-1)</label><input id="c_slug"></div>
@@ -206,6 +212,7 @@
       const precoReais = parseFloat($('c_price').value || '0');
       const { error: insErr } = await sb.from('comics').insert({
         title, slug,
+        tipo: $('c_tipo').value,
         series: $('c_series').value.trim() || null,
         number: $('c_number').value ? parseInt($('c_number').value) : null,
         synopsis: $('c_synopsis').value.trim() || null,
@@ -238,17 +245,23 @@
     data.forEach(c => {
       const div = document.createElement('div');
       div.className = 'comic-item';
+      const tipoLabels = { livro_kids: 'Livro Kids', livro_adulto: 'Livro (Adulto)', jogo: 'Jogo' };
+      const tipoTxt = tipoLabels[c.tipo] || c.tipo || '—';
+      const ehJogo = c.tipo === 'jogo';
       div.innerHTML =
         '<img src="' + (c.cover_url || '') + '" alt="">' +
         '<div class="info"><b></b><span></span></div>' +
         '<div class="actions">' +
-          '<button class="btn-ghost">Páginas</button>' +
+          (ehJogo ? '' : '<button class="btn-ghost">Páginas</button>') +
           '<button class="btn-danger">Apagar</button>' +
         '</div>';
       div.querySelector('b').textContent = c.title;
-      div.querySelector('span').textContent = 'slug: ' + c.slug + '  ·  R$ ' + ((c.price_cents || 0) / 100).toFixed(2) + (c.published ? '' : '  ·  (não publicado)');
-      const [btnPag, btnDel] = div.querySelectorAll('button');
-      btnPag.addEventListener('click', () => abrirPaginas(c.id, c.title));
+      div.querySelector('span').textContent = tipoTxt + '  ·  slug: ' + c.slug + '  ·  R$ ' + ((c.price_cents || 0) / 100).toFixed(2) + (c.published ? '' : '  ·  (não publicado)');
+      const botoes = div.querySelectorAll('.actions button');
+      const btnDel = botoes[botoes.length - 1];
+      if (!ehJogo) {
+        botoes[0].addEventListener('click', () => abrirPaginas(c.id, c.title));
+      }
       btnDel.addEventListener('click', () => apagarComic(c.id, c.title));
       box.appendChild(div);
     });
@@ -315,6 +328,6 @@
       msg.className = 'msg err'; msg.textContent = 'Erro ao aplicar o plano.';
     }
   });
-<script src="/nav.js"></script>
+</script>
 </body>
 </html>
