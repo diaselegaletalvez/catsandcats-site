@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contato — Cats &amp; Cats</title>
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream:#FFF4E0; --ink:#2B2440; --coral:#FF6B5B; --teal:#2EC4B6;
+      --yellow:#FFD23F; --pink:#FF7FB6; --sky:#4D9DE0; --purple:#9B5DE5;
+      --shadow-soft: 0 14px 40px rgba(43,36,64,.12);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family:"Nunito", sans-serif; background:var(--cream); color:var(--ink);
+      -webkit-font-smoothing:antialiased;
+    }
+    a { color:inherit; text-decoration:none; }
+    h1, h2, h3 { font-family:"Fredoka", sans-serif; }
+
+    .wrap { max-width:1000px; margin:0 auto; padding:0 5vw; }
+
+    /* faixa topo */
+    .marquee {
+      background:var(--ink); color:#fff; overflow:hidden; white-space:nowrap;
+      font-family:"Fredoka"; font-weight:600; font-size:14px; padding:9px 0;
+    }
+    .marquee span { display:inline-block; padding-left:100%; animation:scroll 18s linear infinite; }
+    @keyframes scroll { to { transform:translateX(-100%); } }
+
+    /* hero */
+    .hero {
+      text-align:center; padding:54px 5vw 10px;
+    }
+    .hero .kicker {
+      display:inline-block; background:var(--yellow); color:var(--ink);
+      font-family:"Fredoka"; font-weight:600; font-size:13px;
+      padding:6px 16px; border-radius:999px; margin-bottom:16px;
+    }
+    .hero h1 { font-size:clamp(32px,5vw,54px); line-height:1.05; }
+    .hero p { font-size:18px; font-weight:600; max-width:540px; margin:14px auto 0; color:#5d5470; }
+
+    /* card de atendimento */
+    .card {
+      margin:40px auto 0; max-width:760px;
+      background:#fff; border-radius:32px; overflow:hidden;
+      box-shadow:var(--shadow-soft); border:3px solid #f0e4cf;
+    }
+    .card .photo {
+      height:340px;
+      background:linear-gradient(135deg,var(--teal),var(--sky));
+      background-size:cover; background-position:center;
+    }
+    .card .body { padding:36px clamp(24px,5vw,48px); text-align:center; }
+    .card h2 { font-size:30px; color:var(--coral); }
+    .card .body p { font-size:17px; font-weight:600; color:#4a425c; margin-top:14px; line-height:1.6; }
+
+    .btn {
+      display:inline-block; margin-top:26px;
+      font-family:"Fredoka"; font-weight:600; font-size:17px;
+      padding:15px 34px; border-radius:999px; border:none; cursor:pointer;
+      background:var(--coral); color:#fff; box-shadow:0 6px 0 #d8503f;
+      transition:transform .12s;
+    }
+    .btn:hover { transform:translateY(-3px); }
+
+    /* infos rápidas */
+    .infos {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:18px;
+      margin:40px auto 0; max-width:760px;
+    }
+    .info {
+      background:#fff; border-radius:22px; padding:24px; text-align:center;
+      border:3px solid #f0e4cf;
+    }
+    .info h3 { font-size:17px; margin-bottom:6px; }
+    .info p { font-size:15px; font-weight:600; color:#6a6180; }
+
+    footer {
+      margin-top:56px; background:#fff; border-top:3px solid #f0e4cf;
+      padding:30px 5vw; text-align:center; font-size:14px; color:#8a7f6a;
+    }
+
+    @media (max-width:720px) {
+      .infos { grid-template-columns:1fr; }
+      .card .photo { height:240px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="marquee"><span>Entrega para todo o Brasil &nbsp;&nbsp;•&nbsp;&nbsp; Atendimento de segunda a sexta &nbsp;&nbsp;•&nbsp;&nbsp; Frete grátis acima de R$99 &nbsp;&nbsp;•&nbsp;&nbsp; Cats &amp; Cats</span></div>
+
+  <section class="hero">
+    <span class="kicker">Estamos aqui pra ajudar</span>
+    <h1>Fale com a gente</h1>
+    <p>Dúvida sobre um pedido, troca ou um quadrinho? É só chamar — a gente responde rapidinho.</p>
+  </section>
+
+  <div class="wrap">
+    <div class="card">
+      <div class="photo" style="background-image:url('/gato-contato.jpg');"></div>
+      <div class="body">
+        <h2>Atendimento ao Cliente</h2>
+        <p>
+          Nosso time está disponível para te atender de <strong>segunda a sexta-feira, das 9h às 18h</strong> (horário de Brasília).<br><br>
+          Para agilizar, no momento do contato envie o <strong>número do seu pedido</strong> e, se for o caso, uma <strong>foto do produto</strong>.
+        </p>
+        <a class="btn" href="mailto:suporte.look360@gmail.com">Enviar um e-mail</a>
+      </div>
+    </div>
+
+    <div class="infos">
+      <div class="info">
+        <h3>E-mail</h3>
+        <p>suporte.look360@gmail.com</p>
+      </div>
+      <div class="info">
+        <h3>Horário</h3>
+        <p>Seg a sex, 9h às 18h</p>
+      </div>
+      <div class="info">
+        <h3>Entrega</h3>
+        <p>Para todo o Brasil</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © Cats &amp; Cats — Todos os direitos reservados.
+  </footer>
+
+  <script src="/nav.js"></script>
+</body>
+</html>
