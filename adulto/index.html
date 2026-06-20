@@ -200,9 +200,25 @@
   /* reveal */
   .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
   .reveal.in { opacity: 1; transform: none; }
+  .world-switch {
+    position: fixed; right: 16px; bottom: 16px; z-index: 60;
+    background: #FF6B5B; color: #fff; font-family: var(--display); font-weight: 700;
+    font-size: 14px; padding: 11px 20px; border-radius: 999px; text-decoration: none;
+    box-shadow: 0 6px 18px rgba(0,0,0,.25); transition: transform .12s;
+  }
+  .world-switch:hover { transform: translateY(-2px); }
+  .mundo-switch {
+    position: fixed; bottom: 18px; right: 18px; z-index: 90;
+    background: #FF6B5B; color: #fff; font-family: var(--display);
+    font-weight: 700; font-size: .85rem; text-decoration: none;
+    padding: 11px 20px; border-radius: 999px; box-shadow: 0 8px 20px rgba(0,0,0,.18);
+    transition: transform .12s;
+  }
+  .mundo-switch:hover { transform: translateY(-3px); }
 </style>
 </head>
 <body>
+<a class="mundo-switch" href="/kids/">Mundo Kids</a>
 
 <!-- AVISO DE CONTEÚDO ADULTO -->
 <div class="modal-bg open" id="ageGate" style="z-index:200;">
@@ -620,5 +636,6 @@
   }
   carregarLojaAdulto();
 </script>
+<a class="world-switch" href="/kids/" aria-label="Ir para o Mundo Kids">Mundo Kids ›</a>
 </body>
 </html>
