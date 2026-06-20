@@ -198,6 +198,17 @@
 </head>
 <body>
 
+<!-- AVISO DE CONTEÚDO ADULTO -->
+<div class="modal-bg open" id="ageGate" style="z-index:200;">
+  <div class="modal" style="text-align:center;">
+    <h3>Conteúdo adulto</h3>
+    <p class="sub">Esta área pode conter conteúdo destinado a maiores de 18 anos. Confirme sua idade para continuar.</p>
+    <button class="btn btn-primary" id="ageOk">Tenho 18 anos ou mais</button>
+    <button class="btn" id="ageNo" style="margin-top:10px;">Sair</button>
+    <div class="modal-foot">Ao continuar, você declara ter 18 anos ou mais.</div>
+  </div>
+</div>
+
 <header>
   <div class="wrap nav">
     <a href="#" class="brand"><span class="mark">C</span> Cats &amp; Cats</a>
@@ -362,6 +373,20 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   // Supabase — mesma base de contas do app
+  // ===== Aviso de conteúdo adulto (confirmação de idade) =====
+  (function(){
+    var gate = document.getElementById('ageGate');
+    if (!gate) return;
+    try { if (localStorage.getItem('cc_maioridade') === 'sim') gate.classList.remove('open'); } catch(e){}
+    var ok = document.getElementById('ageOk');
+    var no = document.getElementById('ageNo');
+    if (ok) ok.addEventListener('click', function(){
+      try { localStorage.setItem('cc_maioridade', 'sim'); } catch(e){}
+      gate.classList.remove('open');
+    });
+    if (no) no.addEventListener('click', function(){ window.location.href = '/'; });
+  })();
+
   const SB_URL = 'https://urguoedgajhykkczatcx.supabase.co';
   const SB_KEY = 'sb_publishable_53he8rq2bdCmlEVyHf0Q3Q_Mnl1jim_';
   const sb = supabase.createClient(SB_URL, SB_KEY);
