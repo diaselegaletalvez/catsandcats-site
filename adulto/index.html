@@ -105,6 +105,9 @@
       var(--bg);
     border-bottom: 1px solid var(--line); }
   .thumb .glyph { font-family: var(--display); font-weight: 800; font-size: 2.4rem; opacity: .15; letter-spacing: -.04em; }
+  .thumb-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .loja-sub { font-family: var(--display); font-weight: 800; font-size: 1.2rem; margin: 6px 0 16px; }
+  .loja-sub + .grid { margin-bottom: 34px; }
   .tag { position: absolute; top: 12px; left: 12px; font-size: .68rem; letter-spacing: .12em; text-transform: uppercase;
     background: var(--ink); color: var(--bg); padding: 4px 9px; border-radius: 6px; font-weight: 600; }
   .card-body { padding: 16px 16px 18px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
@@ -232,23 +235,11 @@
         <h2>A loja</h2>
         <span>Comics, camisas e xícaras · pagamento via Pix</span>
       </div>
+      <h3 class="loja-sub">Quadrinhos</h3>
+      <div class="grid" id="grid-adulto"><p class="lib-empty">Carregando...</p></div>
+
+      <h3 class="loja-sub">Produtos</h3>
       <div class="grid">
-        <article class="card reveal">
-          <div class="thumb"><span class="tag">Comic</span><span class="glyph">T</span></div>
-          <div class="card-body">
-            <h3>Tico — Edição 1</h3>
-            <p class="meta">O primeiro da série. Físico ou online.</p>
-            <div class="price-row"><span class="price">R$ 29,90</span><button class="buy" data-item="tico-1">Comprar</button></div>
-          </div>
-        </article>
-        <article class="card reveal">
-          <div class="thumb"><span class="tag">Comic</span><span class="glyph">2</span></div>
-          <div class="card-body">
-            <h3>Tico — Edição 2</h3>
-            <p class="meta">Continuação da série Tico.</p>
-            <div class="price-row"><span class="price">R$ 29,90</span><button class="buy" data-item="tico-2">Comprar</button></div>
-          </div>
-        </article>
         <article class="card reveal">
           <div class="thumb"><span class="tag">Camisa</span><span class="glyph">C</span></div>
           <div class="card-body">
@@ -534,8 +525,8 @@
   });
 
   // ===== Botões de compra/assinatura: exige login, depois chama a função criar-checkout =====
-  document.querySelectorAll('.buy, .plan .btn').forEach(b => b.addEventListener('click', async (ev) => {
-    ev.preventDefault();
+  async function iniciarCheckout(b, ev){
+    if (ev) ev.preventDefault();
     if (!sessaoAtual){ abrirModal(); return; }
     const itemId = b.dataset.item;
     if (!itemId) return;
@@ -545,17 +536,58 @@
     try {
       const { data, error } = await sb.functions.invoke('criar-checkout', { body: { itemId } });
       if (error) throw error;
-      if (data && data.url) {
-        window.location.href = data.url;
-        return;
-      }
+      if (data && data.url) { window.location.href = data.url; return; }
       alert('Não foi possível iniciar o pagamento. Tente de novo.');
     } catch (e) {
       alert('Erro ao iniciar o pagamento. Tente de novo.');
     }
     b.textContent = textoOriginal;
     b.style.pointerEvents = '';
-  }));
+  }
+  document.querySelectorAll('.buy, .plan .btn').forEach(b => b.addEventListener('click', (ev) => iniciarCheckout(b, ev)));
+
+  // ===== Loja: quadrinhos adultos dinâmicos (Supabase, tipo = livro_adulto) =====
+  function precoBRAdulto(cents){ return 'R$ ' + ((cents||0)/100).toFixed(2).replace('.', ','); }
+  async function carregarLojaAdulto(){
+    const grid = document.getElementById('grid-adulto');
+    if (!grid) return;
+    try {
+      const { data, error } = await sb.from('comics')
+        .select('title,slug,cover_url,price_cents,published,tipo,series,created_at')
+        .eq('tipo','livro_adulto').eq('published', true)
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      if (!data || !data.length){
+        grid.innerHTML = '<p class="lib-empty">Em breve, novos quadrinhos.</p>';
+        return;
+      }
+      grid.innerHTML = '';
+      data.forEach(c => {
+        const art = document.createElement('article');
+        art.className = 'card reveal';
+        const inicial = (c.title || '?').trim().charAt(0).toUpperCase();
+        const thumb = c.cover_url
+          ? '<div class="thumb"><img class="thumb-img" src="' + c.cover_url + '" alt=""></div>'
+          : '<div class="thumb"><span class="tag">Comic</span><span class="glyph">' + inicial + '</span></div>';
+        const preco = (c.price_cents > 0) ? precoBRAdulto(c.price_cents) : 'Grátis';
+        const link = '/produto/?slug=' + encodeURIComponent(c.slug);
+        art.innerHTML = thumb +
+          '<div class="card-body"><h3><a href="' + link + '" style="color:inherit;text-decoration:none;"></a></h3>' +
+          (c.series ? '<p class="meta"></p>' : '') +
+          '<div class="price-row"><span class="price">' + preco + '</span>' +
+          '<button class="buy" data-item="' + c.slug + '">Comprar</button></div></div>';
+        art.querySelector('h3 a').textContent = c.title;
+        if (c.series) art.querySelector('.meta').textContent = c.series;
+        const btn = art.querySelector('.buy');
+        btn.addEventListener('click', (ev) => iniciarCheckout(btn, ev));
+        grid.appendChild(art);
+        requestAnimationFrame(() => art.classList.add('in'));
+      });
+    } catch (e) {
+      grid.innerHTML = '<p class="lib-empty">Não foi possível carregar os quadrinhos agora.</p>';
+    }
+  }
+  carregarLojaAdulto();
 </script>
 </body>
 </html>
