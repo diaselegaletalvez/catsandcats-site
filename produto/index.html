@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Produto — Cats &amp; Cats</title>
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream:#FFF4E0; --ink:#2B2440; --coral:#FF6B5B; --teal:#2EC4B6;
+      --yellow:#FFD23F; --pink:#FF7FB6; --sky:#4D9DE0; --purple:#9B5DE5;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:"Nunito",sans-serif; background:var(--cream); color:var(--ink); -webkit-font-smoothing:antialiased; }
+    a { color:inherit; text-decoration:none; }
+    h1,h2,h3 { font-family:"Fredoka",sans-serif; }
+
+    .topbar {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 5vw; background:#fff; border-bottom:3px solid #f0e4cf;
+      position:sticky; top:0; z-index:10;
+    }
+    .logo { display:flex; align-items:center; gap:8px; font-family:"Fredoka"; font-weight:700; font-size:20px; color:var(--coral); }
+    .logo svg { width:24px; height:24px; }
+    .voltar {
+      font-family:"Fredoka"; font-weight:600; font-size:14px; color:var(--ink);
+      background:var(--cream); padding:8px 16px; border-radius:999px; border:2px solid #f0e4cf;
+    }
+    .voltar:hover { background:#f6ead2; }
+
+    .wrap { max-width:980px; margin:0 auto; padding:34px 5vw 60px; }
+    .estado { text-align:center; font-weight:700; color:#6a6180; padding:60px 0; font-size:18px; }
+
+    .prod { display:grid; grid-template-columns:380px 1fr; gap:40px; align-items:start; }
+    .capa {
+      width:100%; aspect-ratio:3/4; border-radius:26px; overflow:hidden;
+      background:linear-gradient(135deg,var(--coral),var(--pink));
+      display:grid; place-items:center; box-shadow:0 18px 40px rgba(43,36,64,.18);
+      border:6px solid #fff;
+    }
+    .capa img { width:100%; height:100%; object-fit:cover; }
+    .capa .paw { width:120px; height:120px; }
+
+    .badge {
+      display:inline-block; background:var(--yellow); color:var(--ink);
+      font-family:"Fredoka"; font-weight:600; font-size:13px;
+      padding:6px 16px; border-radius:999px; margin-bottom:14px;
+    }
+    .info h1 { font-size:clamp(28px,4vw,42px); line-height:1.08; }
+    .meta { font-weight:700; color:#6a6180; margin-top:8px; font-size:15px; }
+    .preco { margin:22px 0 6px; }
+    .preco .now { font-family:"Fredoka"; font-weight:700; font-size:34px; color:var(--coral); }
+    .preco .free { color:var(--teal); }
+    .buy {
+      margin-top:18px; font-family:"Fredoka"; font-weight:600; font-size:18px;
+      padding:15px 40px; border-radius:999px; border:none; cursor:pointer;
+      background:var(--coral); color:#fff; box-shadow:0 6px 0 #d8503f; transition:transform .12s;
+    }
+    .buy:hover { transform:translateY(-3px); }
+    .sinopse { margin-top:30px; }
+    .sinopse h2 { font-size:20px; margin-bottom:10px; }
+    .sinopse p { font-weight:600; line-height:1.7; color:#4a425c; white-space:pre-line; }
+    .msg { margin-top:14px; font-weight:700; }
+    .msg.err { color:#c0392b; }
+
+    @media (max-width:760px) {
+      .prod { grid-template-columns:1fr; gap:24px; }
+      .capa { max-width:300px; margin:0 auto; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="logo" href="/kids/">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5.5" cy="11" r="2.1"/><circle cx="9.5" cy="7.4" r="2.2"/><circle cx="14.5" cy="7.4" r="2.2"/><circle cx="18.5" cy="11" r="2.1"/><path d="M12 12.4c2.8 0 5 2 5 4.3 0 1.7-1.6 2.4-3.2 1.9-1.1-.4-2.5-.4-3.6 0-1.6.5-3.2-.2-3.2-1.9 0-2.3 2.2-4.3 5-4.3z"/></svg>
+      Cats &amp; Cats
+    </a>
+    <a class="voltar" href="/kids/" id="voltar">Voltar</a>
+  </header>
+
+  <main class="wrap" id="conteudo">
+    <p class="estado">Carregando…</p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    var SB_URL = 'https://urguoedgajhykkczatcx.supabase.co';
+    var SB_KEY = 'sb_publishable_53he8rq2bdCmlEVyHf0Q3Q_Mnl1jim_';
+    var sb = window.supabase ? window.supabase.createClient(SB_URL, SB_KEY) : null;
+    var sessao = null;
+    var PAW = '<svg class="paw" viewBox="0 0 24 24" fill="rgba(255,255,255,.85)" aria-hidden="true"><circle cx="5.5" cy="11" r="2.3"/><circle cx="9.5" cy="7.2" r="2.4"/><circle cx="14.5" cy="7.2" r="2.4"/><circle cx="18.5" cy="11" r="2.3"/><path d="M12 12.3c2.9 0 5.2 2.1 5.2 4.5 0 1.8-1.7 2.5-3.4 2-1.1-.4-2.6-.4-3.7 0-1.6.5-3.3-.2-3.3-2 0-2.4 2.3-4.5 5.2-4.5z"/></svg>';
+    var TIPOS = { livro_kids:'Livro Kids', livro_adulto:'Livro (Adulto)', jogo:'Jogo' };
+
+    // botão voltar usa o histórico se houver
+    document.getElementById('voltar').addEventListener('click', function (e) {
+      if (history.length > 1) { e.preventDefault(); history.back(); }
+    });
+
+    function precoBR(cents) { return 'R$' + ((cents || 0) / 100).toFixed(2).replace('.', ','); }
+    function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
+
+    function getSlug() {
+      var p = new URLSearchParams(window.location.search);
+      return (p.get('slug') || '').trim();
+    }
+
+    async function carregar() {
+      var box = document.getElementById('conteudo');
+      var slug = getSlug();
+      if (!sb) { box.innerHTML = '<p class="estado">Não foi possível carregar (conexão).</p>'; return; }
+      if (!slug) { box.innerHTML = '<p class="estado">Produto não encontrado.</p>'; return; }
+
+      sb.auth.getSession().then(function (r) { sessao = r.data.session; });
+      sb.auth.onAuthStateChange(function (_e, s) { sessao = s; });
+
+      try {
+        var res = await sb.from('comics')
+          .select('title,slug,cover_url,price_cents,published,tipo,series,number,synopsis,author,artist')
+          .eq('slug', slug).eq('published', true).maybeSingle();
+        if (res.error) throw res.error;
+        var c = res.data;
+        if (!c) { box.innerHTML = '<p class="estado">Produto não encontrado.</p>'; return; }
+        render(c);
+      } catch (e) {
+        box.innerHTML = '<p class="estado">Não foi possível carregar agora. Tente recarregar a página.</p>';
+      }
+    }
+
+    function render(c) {
+      var box = document.getElementById('conteudo');
+      var capa = c.cover_url
+        ? '<div class="capa"><img src="' + esc(c.cover_url) + '" alt="' + esc(c.title) + '"></div>'
+        : '<div class="capa">' + PAW + '</div>';
+
+      var metaPartes = [];
+      if (c.series) metaPartes.push(esc(c.series) + (c.number ? ' #' + esc(c.number) : ''));
+      if (c.author) metaPartes.push('Autor: ' + esc(c.author));
+      if (c.artist) metaPartes.push('Arte: ' + esc(c.artist));
+      var meta = metaPartes.length ? '<p class="meta">' + metaPartes.join('  ·  ') + '</p>' : '';
+
+      var precoTxt = (c.price_cents > 0)
+        ? '<span class="now">' + precoBR(c.price_cents) + '</span>'
+        : '<span class="now free">Grátis</span>';
+
+      var sinopse = c.synopsis
+        ? '<div class="sinopse"><h2>Sobre</h2><p>' + esc(c.synopsis) + '</p></div>'
+        : '';
+
+      box.innerHTML =
+        '<div class="prod">' +
+          '<div>' + capa + '</div>' +
+          '<div class="info">' +
+            '<span class="badge">' + esc(TIPOS[c.tipo] || 'Quadrinho') + '</span>' +
+            '<h1>' + esc(c.title) + '</h1>' +
+            meta +
+            '<div class="preco">' + precoTxt + '</div>' +
+            '<button class="buy" id="btnComprar">Comprar</button>' +
+            '<div class="msg" id="msgCompra"></div>' +
+            sinopse +
+          '</div>' +
+        '</div>';
+
+      document.getElementById('btnComprar').addEventListener('click', function () { comprar(c.slug); });
+    }
+
+    async function comprar(slug) {
+      var btn = document.getElementById('btnComprar');
+      var msg = document.getElementById('msgCompra');
+      msg.className = 'msg';
+      if (!sessao) {
+        msg.textContent = 'Entre na sua conta para comprar.';
+        setTimeout(function () { window.location.href = '/painel/'; }, 900);
+        return;
+      }
+      var txt = btn.textContent;
+      btn.textContent = 'Aguarde...'; btn.style.pointerEvents = 'none';
+      try {
+        var r = await sb.functions.invoke('criar-checkout', { body: { itemId: slug } });
+        if (r.error) throw r.error;
+        if (r.data && r.data.url) { window.location.href = r.data.url; return; }
+        msg.className = 'msg err'; msg.textContent = 'Não foi possível iniciar o pagamento. Tente de novo.';
+      } catch (e) {
+        msg.className = 'msg err'; msg.textContent = 'Erro ao iniciar o pagamento. Tente de novo.';
+      }
+      btn.textContent = txt; btn.style.pointerEvents = '';
+    }
+
+    carregar();
+  </script>
+</body>
+</html>
