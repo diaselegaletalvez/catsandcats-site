@@ -105,9 +105,24 @@
     }
     async function entrar(){
       $('loginMsg').textContent = 'Entrando...';
-      const { error } = await sb.auth.signInWithPassword({ email: $('email').value.trim(), password: $('senha').value });
-      if(error){ $('loginMsg').textContent = 'E-mail ou senha incorretos.'; }
-      else { $('loginMsg').textContent = ''; }
+      const email = $('email').value.trim();
+      const { error } = await sb.auth.signInWithPassword({ email, password: $('senha').value });
+      if(error){
+        const m = (error.message || '').toLowerCase();
+        if(m.indexOf('not confirmed') >= 0 || m.indexOf('confirm') >= 0){
+          $('loginMsg').innerHTML = 'Seu e-mail ainda não foi confirmado. Veja sua caixa de entrada (e o spam). <a href="#" onclick="reenviar();return false;">Reenviar confirmação</a>';
+        } else if(m.indexOf('invalid') >= 0){
+          $('loginMsg').textContent = 'E-mail ou senha incorretos.';
+        } else {
+          $('loginMsg').textContent = 'Não foi possível entrar: ' + (error.message || 'erro desconhecido');
+        }
+      } else { $('loginMsg').textContent = ''; }
+    }
+    async function reenviar(){
+      const email = $('email').value.trim();
+      if(!email){ $('loginMsg').textContent = 'Digite seu e-mail primeiro.'; return; }
+      const { error } = await sb.auth.resend({ type: 'signup', email });
+      $('loginMsg').textContent = error ? ('Erro ao reenviar: ' + error.message) : 'Confirmação reenviada! Verifique seu e-mail.';
     }
     async function sair(){ await sb.auth.signOut(); sessao = null; render(); }
 
@@ -146,6 +161,6 @@
     }
 
     render();
-  <script src="/nav.js"></script>
+  </script>
 </body>
 </html>
