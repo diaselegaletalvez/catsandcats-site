@@ -89,6 +89,23 @@
       .infos { grid-template-columns:1fr; }
       .card .photo { height:240px; }
     }
+    .form-card {
+      margin:40px auto 0; max-width:760px; background:#fff; border-radius:28px;
+      padding:34px clamp(24px,5vw,44px); border:3px solid #f0e4cf; box-shadow:var(--shadow-soft);
+    }
+    .form-card h2 { font-size:26px; color:var(--coral); text-align:center; margin-bottom:24px; }
+    .campo { margin-bottom:16px; }
+    .campo label { display:block; font-weight:700; margin-bottom:6px; font-size:14px; }
+    .campo input, .campo textarea {
+      width:100%; font-family:"Nunito",sans-serif; font-size:15px; font-weight:600; color:var(--ink);
+      background:var(--cream); border:3px solid #f0e4cf; border-radius:16px; padding:12px 16px; outline:none;
+    }
+    .campo input:focus, .campo textarea:focus { border-color:var(--teal); }
+    .campo textarea { resize:vertical; }
+    .form-card .btn { display:block; width:100%; margin-top:8px; box-shadow:0 6px 0 #d8503f; }
+    .form-msg { text-align:center; font-weight:700; margin-top:14px; min-height:20px; }
+    .form-msg.ok { color:#1e8449; }
+    .form-msg.err { color:#c0392b; }
   </style>
 </head>
 <body>
@@ -128,12 +145,64 @@
         <p>Para todo o Brasil</p>
       </div>
     </div>
+
+    <div class="form-card">
+      <h2>Mande uma mensagem</h2>
+      <div class="campo"><label for="f_nome">Nome</label><input id="f_nome" type="text" /></div>
+      <div class="campo"><label for="f_email">E-mail</label><input id="f_email" type="email" /></div>
+      <div class="campo"><label for="f_msg">Mensagem</label><textarea id="f_msg" rows="5"></textarea></div>
+      <button class="btn" id="f_enviar">Enviar mensagem</button>
+      <div class="form-msg" id="f_status"></div>
+    </div>
   </div>
 
   <footer>
     © Cats &amp; Cats — Todos os direitos reservados.
   </footer>
 
+  <script>
+    (function () {
+      // Cole aqui a sua Access Key do Web3Forms (pegue grátis em web3forms.com):
+      var ACCESS_KEY = 'SEU_ACCESS_KEY_AQUI';
+      var btn = document.getElementById('f_enviar');
+      var status = document.getElementById('f_status');
+      if (!btn) return;
+      btn.addEventListener('click', async function () {
+        status.className = 'form-msg';
+        var nome = document.getElementById('f_nome').value.trim();
+        var email = document.getElementById('f_email').value.trim();
+        var msg = document.getElementById('f_msg').value.trim();
+        if (!nome || !email || !msg) { status.className = 'form-msg err'; status.textContent = 'Preencha nome, e-mail e mensagem.'; return; }
+        var orig = btn.textContent; btn.textContent = 'Enviando...'; btn.style.pointerEvents = 'none';
+        try {
+          var r = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({
+              access_key: ACCESS_KEY,
+              subject: 'Nova mensagem do site Cats & Cats',
+              from_name: 'Site Cats & Cats',
+              name: nome,
+              email: email,
+              message: msg
+            })
+          });
+          var json = await r.json();
+          if (json.success) {
+            status.className = 'form-msg ok'; status.textContent = 'Mensagem enviada! Em breve a gente responde.';
+            document.getElementById('f_nome').value = '';
+            document.getElementById('f_email').value = '';
+            document.getElementById('f_msg').value = '';
+          } else {
+            status.className = 'form-msg err'; status.textContent = 'Não foi possível enviar. Tente de novo ou mande um e-mail.';
+          }
+        } catch (e) {
+          status.className = 'form-msg err'; status.textContent = 'Erro de conexão. Tente de novo ou mande um e-mail.';
+        }
+        btn.textContent = orig; btn.style.pointerEvents = '';
+      });
+    })();
+  </script>
   <script src="/nav.js"></script>
 </body>
 </html>
