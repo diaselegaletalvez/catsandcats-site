@@ -384,13 +384,32 @@
     transition: transform .12s;
   }
   .mundo-switch:hover { transform: translateY(-3px); }
+
+  /* ===== Em breve ===== */
+  .em-breve-sec { display: grid; place-items: center; }
+  .eb-card {
+    text-align: center; max-width: 540px; margin: 0 auto;
+    background: linear-gradient(135deg, var(--coral), var(--pink));
+    color: #fff; border-radius: 32px; padding: 44px 32px;
+    box-shadow: 0 18px 44px rgba(255,107,91,.32);
+  }
+  .eb-emoji { margin-bottom: 8px; }
+  .eb-card h2 { font-family: "Fredoka", sans-serif; font-size: clamp(26px,4vw,36px); }
+  .eb-card p { font-weight: 600; font-size: 16px; margin: 12px auto 22px; max-width: 400px; line-height: 1.55; opacity: .96; }
+  .eb-card .btn {
+    display: inline-block; background: #fff; color: var(--coral);
+    font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 16px;
+    padding: 13px 28px; border-radius: 999px; text-decoration: none;
+    box-shadow: 0 6px 0 rgba(0,0,0,.12); transition: transform .12s;
+  }
+  .eb-card .btn:hover { transform: translateY(-3px); }
 </style>
 </head>
 <body>
 
   <div class="marquee"><span>Quadrinhos digitais &nbsp;•&nbsp; Acesso na hora &nbsp;•&nbsp; Quadrinhos novos toda semana &nbsp;•&nbsp; Bem-vindo ao Mundo Kids da Cats &amp; Cats &nbsp;•&nbsp; Quadrinhos digitais &nbsp;•&nbsp; Acesso na hora &nbsp;•&nbsp; Quadrinhos novos toda semana</span></div>
 
-  <header>
+  <header id="topo">
     <a class="logo" href="/"><span class="paw"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><circle cx="5.5" cy="11" r="2.1"/><circle cx="9.5" cy="7.4" r="2.2"/><circle cx="14.5" cy="7.4" r="2.2"/><circle cx="18.5" cy="11" r="2.1"/><path d="M12 12.4c2.8 0 5 2 5 4.3 0 1.7-1.6 2.4-3.2 1.9-1.1-.4-2.5-.4-3.6 0-1.6.5-3.2-.2-3.2-1.9 0-2.3 2.2-4.3 5-4.3z"/></svg></span> Cats &amp; Cats</a>
     <div class="search">
       <span><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span>
@@ -406,12 +425,12 @@
   </header>
 
   <nav>
-    <div class="tab active" data-tab>Início</div>
-    <div class="tab t2" data-tab>Quadrinhos</div>
-    <div class="tab t3" data-tab>Personagens</div>
-    <div class="tab t4" data-tab>Promoções</div>
-    <div class="tab t5" data-tab>Curiosidades</div>
-    <div class="tab" data-tab>Contato</div>
+    <div class="tab active" data-tab data-go="#topo">Início</div>
+    <div class="tab t2" data-tab data-go="#lancamentos">Quadrinhos</div>
+    <div class="tab t3" data-tab data-go="#em-breve">Personagens</div>
+    <div class="tab t4" data-tab data-go="#lancamentos">Promoções</div>
+    <div class="tab t5" data-tab data-go="#em-breve">Curiosidades</div>
+    <div class="tab" data-tab data-go="/contato/">Contato</div>
   </nav>
 
   <!-- HERO CARROSSEL -->
@@ -455,10 +474,10 @@
 
   <!-- CATEGORY CARDS -->
   <div class="cats-row">
-    <div class="cat-card c1 reveal" style="animation-delay:.05s"><div class="emoji"><svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="#2B2440" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h6v17H6a2 2 0 0 0-2 2z"/><path d="M20 5a2 2 0 0 0-2-2h-6v17h6a2 2 0 0 1 2 2z"/></svg></div><h3>Quadrinhos</h3><p>Veja todos</p></div>
-    <div class="cat-card c2 reveal" style="animation-delay:.1s"><div class="emoji"><svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="#2B2440" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 4l3 4M19.5 4l-3 4"/><path d="M5 9c0-2 3-3 7-3s7 1 7 3v4.5a7 7 0 0 1-14 0z"/><circle cx="9.5" cy="12" r="1" fill="#2B2440"/><circle cx="14.5" cy="12" r="1" fill="#2B2440"/><path d="M12 13.5v1.5M9.8 16l2.2-.4 2.2.4"/></svg></div><h3>Personagens</h3><p>Conheça a turma</p></div>
-    <div class="cat-card c3 reveal" style="animation-delay:.15s"><div class="emoji"><svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="#2B2440" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="5"/><path d="M6 12h2M7 11v2"/><circle cx="16" cy="11.5" r="1" fill="#2B2440"/><circle cx="18.5" cy="13" r="1" fill="#2B2440"/></svg></div><h3>Jogos</h3><p>Diversão pra você</p></div>
-    <div class="cat-card c4 reveal" style="animation-delay:.2s"><div class="emoji"><svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="#2B2440" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h7l9 9-7 7-9-9z"/><circle cx="8.5" cy="8.5" r="1.3" fill="#2B2440"/></svg></div><h3>Promoções</h3><p>Ofertas do dia</p></div>
+    <div class="cat-card c1 reveal" data-go="#lancamentos" style="animation-delay:.05s"><div class="emoji"><svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="#2B2440" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h6v17H6a2 2 0 0 0-2 2z"/><path d="M20 5a2 2 0 0 0-2-2h-6v17h6a2 2 0 0 1 2 2z"/></svg></div><h3>Quadrinhos</h3><p>Veja todos</p></div>
+    <div class="cat-card c2 reveal" data-go="#em-breve" style="animation-delay:.1s"><div class="emoji"><svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="#2B2440" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 4l3 4M19.5 4l-3 4"/><path d="M5 9c0-2 3-3 7-3s7 1 7 3v4.5a7 7 0 0 1-14 0z"/><circle cx="9.5" cy="12" r="1" fill="#2B2440"/><circle cx="14.5" cy="12" r="1" fill="#2B2440"/><path d="M12 13.5v1.5M9.8 16l2.2-.4 2.2.4"/></svg></div><h3>Personagens</h3><p>Conheça a turma</p></div>
+    <div class="cat-card c3 reveal" data-go="#em-breve" style="animation-delay:.15s"><div class="emoji"><svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="#2B2440" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="5"/><path d="M6 12h2M7 11v2"/><circle cx="16" cy="11.5" r="1" fill="#2B2440"/><circle cx="18.5" cy="13" r="1" fill="#2B2440"/></svg></div><h3>Jogos</h3><p>Diversão pra você</p></div>
+    <div class="cat-card c4 reveal" data-go="#lancamentos" style="animation-delay:.2s"><div class="emoji"><svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="#2B2440" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h7l9 9-7 7-9-9z"/><circle cx="8.5" cy="8.5" r="1.3" fill="#2B2440"/></svg></div><h3>Promoções</h3><p>Ofertas do dia</p></div>
   </div>
 
   <!-- LANÇAMENTOS -->
@@ -468,6 +487,18 @@
     </div>
     <div class="grid" id="grid-kids">
       <p class="grid-msg">Carregando…</p>
+    </div>
+  </section>
+
+  <!-- EM BREVE -->
+  <section class="block em-breve-sec" id="em-breve">
+    <div class="eb-card reveal">
+      <div class="eb-emoji">
+        <svg viewBox="0 0 24 24" width="56" height="56" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="11" r="2.1"/><circle cx="9.5" cy="7.4" r="2.2"/><circle cx="14.5" cy="7.4" r="2.2"/><circle cx="18.5" cy="11" r="2.1"/><path d="M12 12.4c2.8 0 5 2 5 4.3 0 1.7-1.6 2.4-3.2 1.9-1.1-.4-2.5-.4-3.6 0-1.6.5-3.2-.2-3.2-1.9 0-2.3 2.2-4.3 5-4.3z"/></svg>
+      </div>
+      <h2>Em breve! 🐾</h2>
+      <p>Personagens, curiosidades e joguinhos do Tico estão chegando. Por enquanto, explore os quadrinhos!</p>
+      <a class="btn" href="#lancamentos">Ver quadrinhos</a>
     </div>
   </section>
 
@@ -497,12 +528,30 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // Abas: troca a aba ativa ao clicar
+    // Navegação: rola suave para âncoras (#) ou abre outra página
+    function irPara(dest) {
+      if (!dest) return;
+      if (dest.charAt(0) === '#') {
+        var alvo = document.querySelector(dest);
+        if (alvo) alvo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        window.location.href = dest;
+      }
+    }
+
+    // Abas: troca a aba ativa ao clicar E navega para o destino
     document.querySelectorAll('.tab').forEach(function (t) {
       t.addEventListener('click', function () {
         document.querySelectorAll('.tab').forEach(function (x) { x.classList.remove('active'); });
         t.classList.add('active');
+        irPara(t.getAttribute('data-go'));
       });
+    });
+
+    // Cards de categoria: clicáveis (Quadrinhos, Personagens, Jogos, Promoções)
+    document.querySelectorAll('.cat-card[data-go]').forEach(function (c) {
+      c.style.cursor = 'pointer';
+      c.addEventListener('click', function () { irPara(c.getAttribute('data-go')); });
     });
 
     // ===== Loja Kids: produtos reais do Supabase (tipo = livro_kids) =====
