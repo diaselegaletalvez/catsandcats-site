@@ -114,6 +114,15 @@
     display: grid; place-items: center; border: 2px solid #fff;
   }
 
+  .hamb {
+    display: none;
+    width: 46px; height: 46px; border-radius: 50%;
+    border: 3px solid var(--ink); background: var(--white);
+    place-items: center; cursor: pointer; color: var(--ink);
+    box-shadow: 0 4px 0 var(--ink); transition: transform .12s;
+  }
+  .hamb:hover { transform: translateY(-2px); }
+
   /* ===== Nav tabs ===== */
   nav {
     background: var(--white);
@@ -334,6 +343,10 @@
     .grid { grid-template-columns: repeat(2, 1fr); }
     .search { order: 3; max-width: 100%; flex-basis: 100%; }
     header { flex-wrap: wrap; }
+    .hamb { display: grid; }
+    nav { display: none; flex-direction: column; }
+    nav.open { display: flex; }
+    nav .tab { width: 100%; text-align: center; }
   }
 
   /* ===== Load animation ===== */
@@ -341,6 +354,14 @@
   @keyframes rise { to { opacity: 1; transform: none; } }
   .cat-card .emoji svg { display:block; margin:0 auto; }
   .cover .cover-paw { width:92px; height:92px; }
+  .cover { overflow: hidden; }
+  .cover-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .grid-msg { grid-column: 1 / -1; text-align: center; font-weight: 700; color: #6a6180; padding: 34px 10px; font-size: 18px; }
+  .cover-link { display:block; cursor:pointer; }
+  .cover-link .cover { transition:transform .15s; }
+  .cover-link:hover .cover { transform:translateY(-4px); }
+  .title-link { color:inherit; text-decoration:none; cursor:pointer; }
+  .title-link:hover { color:var(--coral); }
 </style>
 </head>
 <body>
@@ -351,12 +372,15 @@
     <a class="logo" href="/"><span class="paw"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><circle cx="5.5" cy="11" r="2.1"/><circle cx="9.5" cy="7.4" r="2.2"/><circle cx="14.5" cy="7.4" r="2.2"/><circle cx="18.5" cy="11" r="2.1"/><path d="M12 12.4c2.8 0 5 2 5 4.3 0 1.7-1.6 2.4-3.2 1.9-1.1-.4-2.5-.4-3.6 0-1.6.5-3.2-.2-3.2-1.9 0-2.3 2.2-4.3 5-4.3z"/></svg></span> Cats &amp; Cats</a>
     <div class="search">
       <span><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span>
-      <input type="text" placeholder="Buscar quadrinhos, personagens, produtos..." />
+      <input id="busca-kids" type="text" placeholder="Buscar quadrinhos, personagens, produtos..." />
     </div>
     <div class="icons">
       <a class="icon-btn" href="#" title="Minha conta"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></a>
       <a class="icon-btn cart" href="#" title="Carrinho"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.6"/><circle cx="18" cy="20" r="1.6"/><path d="M2.5 3.5H5l2.4 12.2h10.3L20 7H6.2"/></svg><span class="cart-count">0</span></a>
     </div>
+    <button class="hamb" id="hamb" aria-label="Abrir menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
   </header>
 
   <nav>
@@ -386,7 +410,7 @@
         <span class="kicker">Aproveite agora</span>
         <h1>Frete grátis<br>acima de R$99!</h1>
         <p>Receba seus quadrinhos em todo o Brasil sem pagar entrega.</p>
-        <a class="btn" href="#promo">Ver promoções</a>
+        <a class="btn" href="#lancamentos">Ver promoções</a>
       </div>
       <div class="hero-art"><img class="hero-photo" src="/gato-sacola.jpg" alt="Gato" /></div>
     </div>
@@ -419,91 +443,9 @@
   <section class="block" id="lancamentos">
     <div class="sec-head">
       <h2>Lançamentos</h2>
-      <a href="#">Ver todos</a>
     </div>
-    <div class="grid">
-      <div class="product reveal">
-        <span class="badge">25% OFF</span><span class="free">FRETE GRÁTIS</span>
-        <div class="cover cov1"><svg class="cover-paw" viewBox="0 0 24 24" fill="rgba(43,36,64,.42)" aria-hidden="true"><circle cx="5.5" cy="11" r="2.3"/><circle cx="9.5" cy="7.2" r="2.4"/><circle cx="14.5" cy="7.2" r="2.4"/><circle cx="18.5" cy="11" r="2.3"/><path d="M12 12.3c2.9 0 5.2 2.1 5.2 4.5 0 1.8-1.7 2.5-3.4 2-1.1-.4-2.6-.4-3.7 0-1.6.5-3.3-.2-3.3-2 0-2.4 2.3-4.5 5.2-4.5z"/></svg></div>
-        <div class="product-body">
-          <h3>Tico — Edição 1</h3>
-          <div class="price"><span class="now">R$29,90</span><span class="old">R$39,90</span><span class="inst">12x de R$2,49</span></div>
-          <button class="buy">Comprar</button>
-        </div>
-      </div>
-      <div class="product reveal" style="animation-delay:.05s">
-        <span class="badge">20% OFF</span><span class="free">FRETE GRÁTIS</span>
-        <div class="cover cov2"><svg class="cover-paw" viewBox="0 0 24 24" fill="rgba(43,36,64,.42)" aria-hidden="true"><circle cx="5.5" cy="11" r="2.3"/><circle cx="9.5" cy="7.2" r="2.4"/><circle cx="14.5" cy="7.2" r="2.4"/><circle cx="18.5" cy="11" r="2.3"/><path d="M12 12.3c2.9 0 5.2 2.1 5.2 4.5 0 1.8-1.7 2.5-3.4 2-1.1-.4-2.6-.4-3.7 0-1.6.5-3.3-.2-3.3-2 0-2.4 2.3-4.5 5.2-4.5z"/></svg></div>
-        <div class="product-body">
-          <h3>Tico — Edição 2</h3>
-          <div class="price"><span class="now">R$29,90</span><span class="old">R$37,90</span><span class="inst">12x de R$2,49</span></div>
-          <button class="buy">Comprar</button>
-        </div>
-      </div>
-      <div class="product reveal" style="animation-delay:.1s">
-        <span class="badge">NOVO</span>
-        <div class="cover cov3"><svg class="cover-paw" viewBox="0 0 24 24" fill="rgba(43,36,64,.42)" aria-hidden="true"><circle cx="5.5" cy="11" r="2.3"/><circle cx="9.5" cy="7.2" r="2.4"/><circle cx="14.5" cy="7.2" r="2.4"/><circle cx="18.5" cy="11" r="2.3"/><path d="M12 12.3c2.9 0 5.2 2.1 5.2 4.5 0 1.8-1.7 2.5-3.4 2-1.1-.4-2.6-.4-3.7 0-1.6.5-3.3-.2-3.3-2 0-2.4 2.3-4.5 5.2-4.5z"/></svg></div>
-        <div class="product-body">
-          <h3>As Aventuras do Tico</h3>
-          <div class="price"><span class="now">R$34,90</span><span class="inst">12x de R$2,91</span></div>
-          <button class="buy">Comprar</button>
-        </div>
-      </div>
-      <div class="product reveal" style="animation-delay:.15s">
-        <span class="badge">NOVO</span>
-        <div class="cover cov4"><svg class="cover-paw" viewBox="0 0 24 24" fill="rgba(43,36,64,.42)" aria-hidden="true"><circle cx="5.5" cy="11" r="2.3"/><circle cx="9.5" cy="7.2" r="2.4"/><circle cx="14.5" cy="7.2" r="2.4"/><circle cx="18.5" cy="11" r="2.3"/><path d="M12 12.3c2.9 0 5.2 2.1 5.2 4.5 0 1.8-1.7 2.5-3.4 2-1.1-.4-2.6-.4-3.7 0-1.6.5-3.3-.2-3.3-2 0-2.4 2.3-4.5 5.2-4.5z"/></svg></div>
-        <div class="product-body">
-          <h3>Tico no Espaço</h3>
-          <div class="price"><span class="now">R$34,90</span><span class="inst">12x de R$2,91</span></div>
-          <button class="buy">Comprar</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- DESTAQUES / PROMO -->
-  <section class="block" id="promo">
-    <div class="sec-head">
-      <h2>Em destaque</h2>
-      <a href="#">Ver todos</a>
-    </div>
-    <div class="grid">
-      <div class="product reveal">
-        <span class="badge">30% OFF</span><span class="free">FRETE GRÁTIS</span>
-        <div class="cover cov5"><svg class="cover-paw" viewBox="0 0 24 24" fill="rgba(43,36,64,.42)" aria-hidden="true"><circle cx="5.5" cy="11" r="2.3"/><circle cx="9.5" cy="7.2" r="2.4"/><circle cx="14.5" cy="7.2" r="2.4"/><circle cx="18.5" cy="11" r="2.3"/><path d="M12 12.3c2.9 0 5.2 2.1 5.2 4.5 0 1.8-1.7 2.5-3.4 2-1.1-.4-2.6-.4-3.7 0-1.6.5-3.3-.2-3.3-2 0-2.4 2.3-4.5 5.2-4.5z"/></svg></div>
-        <div class="product-body">
-          <h3>Camiseta do Tico</h3>
-          <div class="price"><span class="now">R$55,90</span><span class="old">R$79,90</span><span class="inst">12x de R$4,66</span></div>
-          <button class="buy">Comprar</button>
-        </div>
-      </div>
-      <div class="product reveal" style="animation-delay:.05s">
-        <span class="badge">15% OFF</span>
-        <div class="cover cov6"><svg class="cover-paw" viewBox="0 0 24 24" fill="rgba(43,36,64,.42)" aria-hidden="true"><circle cx="5.5" cy="11" r="2.3"/><circle cx="9.5" cy="7.2" r="2.4"/><circle cx="14.5" cy="7.2" r="2.4"/><circle cx="18.5" cy="11" r="2.3"/><path d="M12 12.3c2.9 0 5.2 2.1 5.2 4.5 0 1.8-1.7 2.5-3.4 2-1.1-.4-2.6-.4-3.7 0-1.6.5-3.3-.2-3.3-2 0-2.4 2.3-4.5 5.2-4.5z"/></svg></div>
-        <div class="product-body">
-          <h3>Caneca Gatinho</h3>
-          <div class="price"><span class="now">R$42,90</span><span class="old">R$49,90</span><span class="inst">12x de R$3,57</span></div>
-          <button class="buy">Comprar</button>
-        </div>
-      </div>
-      <div class="product reveal" style="animation-delay:.1s">
-        <span class="badge">COMBO</span><span class="free">FRETE GRÁTIS</span>
-        <div class="cover cov1"><svg class="cover-paw" viewBox="0 0 24 24" fill="rgba(43,36,64,.42)" aria-hidden="true"><circle cx="5.5" cy="11" r="2.3"/><circle cx="9.5" cy="7.2" r="2.4"/><circle cx="14.5" cy="7.2" r="2.4"/><circle cx="18.5" cy="11" r="2.3"/><path d="M12 12.3c2.9 0 5.2 2.1 5.2 4.5 0 1.8-1.7 2.5-3.4 2-1.1-.4-2.6-.4-3.7 0-1.6.5-3.3-.2-3.3-2 0-2.4 2.3-4.5 5.2-4.5z"/></svg></div>
-        <div class="product-body">
-          <h3>Combo Tico Completo</h3>
-          <div class="price"><span class="now">R$99,90</span><span class="old">R$139,90</span><span class="inst">12x de R$8,32</span></div>
-          <button class="buy">Comprar</button>
-        </div>
-      </div>
-      <div class="product reveal" style="animation-delay:.15s">
-        <span class="badge">ASSINATURA</span>
-        <div class="cover cov2"><svg class="cover-paw" viewBox="0 0 24 24" fill="rgba(43,36,64,.42)" aria-hidden="true"><circle cx="5.5" cy="11" r="2.3"/><circle cx="9.5" cy="7.2" r="2.4"/><circle cx="14.5" cy="7.2" r="2.4"/><circle cx="18.5" cy="11" r="2.3"/><path d="M12 12.3c2.9 0 5.2 2.1 5.2 4.5 0 1.8-1.7 2.5-3.4 2-1.1-.4-2.6-.4-3.7 0-1.6.5-3.3-.2-3.3-2 0-2.4 2.3-4.5 5.2-4.5z"/></svg></div>
-        <div class="product-body">
-          <h3>Plano Pro Kids</h3>
-          <div class="price"><span class="now">R$30,00</span><span class="inst">por mês</span></div>
-          <button class="buy">Assinar</button>
-        </div>
-      </div>
+    <div class="grid" id="grid-kids">
+      <p class="grid-msg">Carregando…</p>
     </div>
   </section>
 
@@ -531,6 +473,7 @@
     <div class="foot-copy">© 2026 Cats &amp; Cats. Todos os direitos reservados. </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     // Abas: troca a aba ativa ao clicar
     document.querySelectorAll('.tab').forEach(function (t) {
@@ -540,16 +483,101 @@
       });
     });
 
-    // Carrinho de mentira (só visual por enquanto)
-    var count = 0;
-    document.querySelectorAll('.buy').forEach(function (b) {
-      b.addEventListener('click', function () {
-        count++;
-        document.querySelector('.cart-count').textContent = count;
-        b.textContent = 'Adicionado!';
-        setTimeout(function () { b.textContent = 'Comprar'; }, 1200);
+    // ===== Loja Kids: produtos reais do Supabase (tipo = livro_kids) =====
+    var SB_URL = 'https://urguoedgajhykkczatcx.supabase.co';
+    var SB_KEY = 'sb_publishable_53he8rq2bdCmlEVyHf0Q3Q_Mnl1jim_';
+    var sb = window.supabase ? window.supabase.createClient(SB_URL, SB_KEY) : null;
+    var PAW = '<svg class="cover-paw" viewBox="0 0 24 24" fill="rgba(43,36,64,.42)" aria-hidden="true"><circle cx="5.5" cy="11" r="2.3"/><circle cx="9.5" cy="7.2" r="2.4"/><circle cx="14.5" cy="7.2" r="2.4"/><circle cx="18.5" cy="11" r="2.3"/><path d="M12 12.3c2.9 0 5.2 2.1 5.2 4.5 0 1.8-1.7 2.5-3.4 2-1.1-.4-2.6-.4-3.7 0-1.6.5-3.3-.2-3.3-2 0-2.4 2.3-4.5 5.2-4.5z"/></svg>';
+    var sessaoKids = null;
+
+    if (sb) {
+      sb.auth.getSession().then(function (r) { sessaoKids = r.data.session; });
+      sb.auth.onAuthStateChange(function (_e, s) { sessaoKids = s; });
+      carregarKids();
+    }
+
+    function precoBR(cents) { return 'R$' + ((cents || 0) / 100).toFixed(2).replace('.', ','); }
+
+    var produtosKids = [];
+
+    async function carregarKids() {
+      var grid = document.getElementById('grid-kids');
+      if (!grid) return;
+      try {
+        var res = await sb.from('comics')
+          .select('title,slug,cover_url,price_cents,published,tipo,created_at')
+          .eq('tipo', 'livro_kids').eq('published', true)
+          .order('created_at', { ascending: false });
+        if (res.error) throw res.error;
+        produtosKids = res.data || [];
+        if (!produtosKids.length) {
+          grid.innerHTML = '<p class="grid-msg">Em breve! Novos quadrinhos kids estão chegando.</p>';
+          return;
+        }
+        renderKids(produtosKids);
+      } catch (e) {
+        grid.innerHTML = '<p class="grid-msg">Não foi possível carregar agora. Tente recarregar a página.</p>';
+      }
+    }
+
+    function renderKids(lista) {
+      var grid = document.getElementById('grid-kids');
+      if (!grid) return;
+      if (!lista.length) {
+        grid.innerHTML = '<p class="grid-msg">Nenhum quadrinho encontrado.</p>';
+        return;
+      }
+      grid.innerHTML = '';
+      lista.forEach(function (c) {
+        var el = document.createElement('div');
+        el.className = 'product';
+        var link = '/produto/?slug=' + encodeURIComponent(c.slug);
+        var cover = c.cover_url
+          ? '<a class="cover-link" href="' + link + '"><div class="cover"><img class="cover-img" src="' + c.cover_url + '" alt=""></div></a>'
+          : '<a class="cover-link" href="' + link + '"><div class="cover cov1">' + PAW + '</div></a>';
+        var precoTxt = (c.price_cents > 0) ? precoBR(c.price_cents) : 'Grátis';
+        el.innerHTML = cover +
+          '<div class="product-body"><h3><a class="title-link" href="' + link + '"></a></h3>' +
+          '<div class="price"><span class="now">' + precoTxt + '</span></div>' +
+          '<button class="buy" data-item="' + c.slug + '">Comprar</button></div>';
+        el.querySelector('.title-link').textContent = c.title;
+        grid.appendChild(el);
       });
-    });
+      ligarCompra();
+    }
+
+    // Busca funcional: filtra os quadrinhos kids ao digitar
+    (function () {
+      var input = document.getElementById('busca-kids');
+      if (!input) return;
+      input.addEventListener('input', function () {
+        var termo = input.value.trim().toLowerCase();
+        if (!termo) { renderKids(produtosKids); return; }
+        var filtrados = produtosKids.filter(function (c) {
+          return (c.title || '').toLowerCase().indexOf(termo) !== -1;
+        });
+        renderKids(filtrados);
+      });
+    })();
+
+    function ligarCompra() {
+      document.querySelectorAll('#grid-kids .buy').forEach(function (b) {
+        b.addEventListener('click', async function () {
+          var itemId = b.dataset.item;
+          if (!itemId) return;
+          if (!sessaoKids) { alert('Entre na sua conta para comprar.'); window.location.href = '/painel/'; return; }
+          var txt = b.textContent;
+          b.textContent = 'Aguarde...'; b.style.pointerEvents = 'none';
+          try {
+            var r = await sb.functions.invoke('criar-checkout', { body: { itemId: itemId } });
+            if (r.error) throw r.error;
+            if (r.data && r.data.url) { window.location.href = r.data.url; return; }
+            alert('Não foi possível iniciar o pagamento. Tente de novo.');
+          } catch (e) { alert('Erro ao iniciar o pagamento. Tente de novo.'); }
+          b.textContent = txt; b.style.pointerEvents = '';
+        });
+      });
+    }
     // Carrossel de banners (rotação automática + setas + bolinhas)
     (function () {
       var carousel = document.getElementById('carousel');
@@ -582,6 +610,23 @@
       carousel.querySelector('.next').addEventListener('click', function () { next(); reset(); });
       carousel.querySelector('.prev').addEventListener('click', function () { prev(); reset(); });
       reset();
+    })();
+
+    // Menu hambúrguer (mobile)
+    (function () {
+      var hamb = document.getElementById('hamb');
+      var navEl = document.querySelector('nav');
+      if (!hamb || !navEl) return;
+      hamb.addEventListener('click', function () {
+        var open = navEl.classList.toggle('open');
+        hamb.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      navEl.querySelectorAll('.tab').forEach(function (t) {
+        t.addEventListener('click', function () {
+          navEl.classList.remove('open');
+          hamb.setAttribute('aria-expanded', 'false');
+        });
+      });
     })();
   </script>
 </body>
