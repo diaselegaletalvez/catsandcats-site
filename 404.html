@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Página não encontrada — Cats &amp; Cats</title>
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream:#FFF4E0; --ink:#2B2440; --coral:#FF6B5B; --teal:#2EC4B6;
+      --yellow:#FFD23F; --pink:#FF7FB6; --purple:#9B5DE5;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family:"Nunito",sans-serif; color:var(--ink);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255,210,63,.45), transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(46,196,182,.4), transparent 42%),
+        var(--cream);
+      min-height:100vh; display:grid; place-items:center; padding:40px 20px;
+      -webkit-font-smoothing:antialiased;
+    }
+    .box { text-align:center; max-width:520px; }
+    .num {
+      font-family:"Fredoka"; font-weight:700; font-size:clamp(70px,16vw,130px);
+      line-height:1; color:var(--coral); letter-spacing:2px;
+    }
+    .cat { width:clamp(170px,40vw,230px); height:auto; margin:6px auto 10px; display:block;
+      filter:drop-shadow(0 16px 22px rgba(43,36,64,.22)); }
+    h1 { font-family:"Fredoka"; font-weight:700; font-size:clamp(24px,5vw,34px); margin-top:8px; }
+    p { font-size:17px; font-weight:600; color:#5d5470; margin:14px auto 0; max-width:400px; line-height:1.6; }
+    .btn {
+      display:inline-block; margin-top:26px; font-family:"Fredoka"; font-weight:600; font-size:18px;
+      padding:15px 38px; border-radius:999px; border:none; color:#fff;
+      background:var(--coral); box-shadow:0 6px 0 #d8503f; transition:transform .12s;
+    }
+    .btn:hover { transform:translateY(-3px); }
+    .links { margin-top:22px; font-weight:700; }
+    .links a { color:var(--purple); text-decoration:none; }
+    .links a:hover { text-decoration:underline; }
+    .sep { color:#c9bda3; margin:0 8px; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="num">404</div>
+
+    <svg class="cat" viewBox="0 0 360 380" xmlns="http://www.w3.org/2000/svg">
+      <defs><style>.ink{stroke:#2B2440;stroke-width:7;stroke-linejoin:round;stroke-linecap:round;}</style></defs>
+      <!-- balão de interrogação -->
+      <g>
+        <path class="ink" fill="#fff" d="M250 70 q40 0 40 34 q0 30 -34 34 l-6 16 l-10 -16 q-30 -6 -30 -34 q0 -34 40 -34 Z"/>
+        <text x="256" y="118" font-family="Fredoka, sans-serif" font-size="46" font-weight="700" fill="#2B2440" text-anchor="middle">?</text>
+      </g>
+      <!-- cauda -->
+      <path class="ink" fill="#FF8C42" d="M262 300 C 330 300 332 215 288 205 C 322 225 312 280 250 275 Z"/>
+      <!-- corpo -->
+      <path class="ink" fill="#FF8C42" d="M92 270 C 92 198 268 198 268 270 C 268 340 222 356 180 356 C 138 356 92 340 92 270 Z"/>
+      <path fill="#FFF0DB" d="M138 262 C 138 236 222 236 222 262 C 222 312 200 336 180 336 C 160 336 138 312 138 262 Z"/>
+      <!-- patas -->
+      <ellipse class="ink" fill="#FF8C42" cx="150" cy="340" rx="24" ry="19"/>
+      <ellipse class="ink" fill="#FF8C42" cx="210" cy="340" rx="24" ry="19"/>
+      <!-- orelhas -->
+      <path class="ink" fill="#FF8C42" d="M120 168 L 102 110 L 170 148 Z"/>
+      <path class="ink" fill="#FF8C42" d="M240 168 L 258 110 L 190 148 Z"/>
+      <path fill="#FF7FB6" d="M126 160 L 116 128 L 156 150 Z"/>
+      <path fill="#FF7FB6" d="M234 160 L 244 128 L 204 150 Z"/>
+      <!-- cabeça -->
+      <circle class="ink" fill="#FF8C42" cx="180" cy="228" r="82"/>
+      <!-- bochechas -->
+      <ellipse fill="#FF7FB6" opacity="0.5" cx="128" cy="252" rx="18" ry="12"/>
+      <ellipse fill="#FF7FB6" opacity="0.5" cx="232" cy="252" rx="18" ry="12"/>
+      <!-- sobrancelhas preocupadas -->
+      <path fill="none" stroke="#2B2440" stroke-width="6" stroke-linecap="round" d="M138 204 l30 10 M222 204 l-30 10"/>
+      <!-- olhos olhando pra cima -->
+      <circle class="ink" fill="#FFFFFF" cx="151" cy="226" r="22"/>
+      <circle class="ink" fill="#FFFFFF" cx="209" cy="226" r="22"/>
+      <circle fill="#2B2440" cx="153" cy="219" r="11"/>
+      <circle fill="#2B2440" cx="207" cy="219" r="11"/>
+      <circle fill="#FFFFFF" cx="149" cy="215" r="4.5"/>
+      <circle fill="#FFFFFF" cx="203" cy="215" r="4.5"/>
+      <!-- nariz -->
+      <path class="ink" fill="#FF7FB6" d="M170 246 L 190 246 L 180 258 Z"/>
+      <!-- boca preocupada (o) -->
+      <ellipse class="ink" fill="#B5345A" cx="180" cy="276" rx="10" ry="12"/>
+      <!-- bigodes -->
+      <g stroke="#2B2440" stroke-width="5" stroke-linecap="round">
+        <path d="M96 240 L 132 246"/><path d="M94 258 L 132 258"/>
+        <path d="M264 240 L 228 246"/><path d="M266 258 L 228 258"/>
+      </g>
+    </svg>
+
+    <h1>Ops! Essa página sumiu</h1>
+    <p>Parece que esse link fugiu igual gato assustado. Vamos te levar de volta?</p>
+    <a class="btn" href="/">Voltar pro início</a>
+    <div class="links">
+      <a href="/kids/">Mundo Kids</a><span class="sep">·</span><a href="/adulto/">Mundo Adulto</a>
+    </div>
+  </div>
+</body>
+</html>
