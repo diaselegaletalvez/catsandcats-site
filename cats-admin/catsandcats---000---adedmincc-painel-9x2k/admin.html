@@ -43,6 +43,24 @@
   .hidden { display: none !important; }
   .center { text-align: center; }
   .login-box { max-width: 380px; margin: 60px auto; }
+  .tipo-tabs { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+  .tipo-tab { flex: 1; min-width: 110px; padding: 11px 10px; border-radius: 10px; border: 1px solid var(--line);
+    background: #0f131a; color: var(--muted); font-weight: 600; cursor: pointer; font-size: .9rem; transition: all .12s; }
+  .tipo-tab:hover { border-color: var(--accent); color: var(--ink); }
+  .tipo-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  #cadCard[data-tipo="jogo"] .so-livro { display: none; }
+  #cadCard[data-tipo="jogo"] .so-adulto { display: none; }
+  #cadCard[data-tipo="livro_kids"] .so-adulto { display: none; }
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; }
+  .stat { background: #0f131a; border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  .stat .n { font-size: 1.6rem; font-weight: 700; color: var(--ink); line-height: 1.1; }
+  .stat .l { font-size: .78rem; color: var(--muted); margin-top: 3px; }
+  .list-controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+  .list-controls input { flex: 1; min-width: 180px; margin: 0; }
+  .filtro-tipos { display: flex; gap: 6px; flex-wrap: wrap; }
+  .filtro-btn { padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); background: #0f131a;
+    color: var(--muted); font-size: .82rem; font-weight: 600; cursor: pointer; }
+  .filtro-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 </style>
 </head>
 <body>
@@ -72,31 +90,36 @@
       </div>
     </div>
 
+    <!-- ESTATÍSTICAS -->
+    <div class="card" id="statsCard">
+      <h2>Visão geral</h2>
+      <div class="stats-grid" id="statsGrid"><p class="muted">Carregando...</p></div>
+    </div>
+
     <!-- CADASTRAR CONTEÚDO -->
-    <div class="card">
+    <div class="card" id="cadCard" data-tipo="livro_kids">
       <h2>Cadastrar conteúdo</h2>
-      <label for="c_tipo">Tipo de conteúdo</label>
-      <select id="c_tipo">
-        <option value="livro_kids">Livro Kids</option>
-        <option value="livro_adulto">Livro (Adulto)</option>
-        <option value="jogo">Jogo</option>
-      </select>
+      <div class="tipo-tabs" id="tipoTabs">
+        <button type="button" class="tipo-tab active" data-tipo="livro_kids">Livro Kids</button>
+        <button type="button" class="tipo-tab" data-tipo="livro_adulto">Livro Adulto</button>
+        <button type="button" class="tipo-tab" data-tipo="jogo">Jogo</button>
+      </div>
       <div class="row">
         <div><label for="c_title">Título</label><input id="c_title"></div>
         <div><label for="c_slug">Slug (ex: tico-1)</label><input id="c_slug"></div>
       </div>
       <div class="row">
-        <div><label for="c_series">Série</label><input id="c_series"></div>
-        <div><label for="c_number">Número</label><input id="c_number" type="number"></div>
         <div><label for="c_price">Preço (R$)</label><input id="c_price" type="number" step="0.01" placeholder="29.90"></div>
+        <div class="so-livro"><label for="c_series">Série</label><input id="c_series"></div>
+        <div class="so-livro"><label for="c_number">Número</label><input id="c_number" type="number"></div>
       </div>
       <label for="c_synopsis">Sinopse</label>
       <textarea id="c_synopsis"></textarea>
-      <div class="row">
+      <div class="row so-adulto">
         <div><label for="c_genre">Gênero</label><input id="c_genre"></div>
         <div><label for="c_rating">Classificação</label><input id="c_rating" placeholder="Livre, 12, 16..."></div>
       </div>
-      <div class="row">
+      <div class="row so-adulto">
         <div><label for="c_author">Autor</label><input id="c_author"></div>
         <div><label for="c_artist">Artista</label><input id="c_artist"></div>
       </div>
@@ -110,6 +133,15 @@
     <!-- LISTA -->
     <div class="card">
       <h2>Comics cadastrados</h2>
+      <div class="list-controls">
+        <input id="buscaComic" placeholder="Buscar por título ou slug..." style="margin:0;">
+        <div class="filtro-tipos">
+          <button class="filtro-btn active" data-filtro="todos">Todos</button>
+          <button class="filtro-btn" data-filtro="livro_kids">Kids</button>
+          <button class="filtro-btn" data-filtro="livro_adulto">Adulto</button>
+          <button class="filtro-btn" data-filtro="jogo">Jogos</button>
+        </div>
+      </div>
       <div id="listaComics"><p class="muted">Carregando...</p></div>
     </div>
 
@@ -154,6 +186,9 @@
 
   const $ = (id) => document.getElementById(id);
   let comicSelecionado = null;
+  let todosComics = [];
+  let editId = null;
+  let filtroAtivo = 'todos';
 
   // ---------- Login ----------
   $('btnEntrar').addEventListener('click', async () => {
@@ -186,10 +221,22 @@
       $('panelView').classList.remove('hidden');
       $('adminEmail').textContent = session.user.email;
       carregarComics();
+      carregarStats();
     } else {
       $('panelView').classList.add('hidden');
       $('loginView').classList.remove('hidden');
     }
+  });
+
+  // ---------- Abas de tipo (Kids / Adulto / Jogo) ----------
+  document.querySelectorAll('.tipo-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tipo-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      $('cadCard').dataset.tipo = tab.dataset.tipo;
+      editId = null;
+      atualizarBtnCad();
+    });
   });
 
   // ---------- Cadastrar comic ----------
@@ -210,9 +257,9 @@
         coverUrl = sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
       }
       const precoReais = parseFloat($('c_price').value || '0');
-      const { error: insErr } = await sb.from('comics').insert({
+      const dados = {
         title, slug,
-        tipo: $('c_tipo').value,
+        tipo: $('cadCard').dataset.tipo,
         series: $('c_series').value.trim() || null,
         number: $('c_number').value ? parseInt($('c_number').value) : null,
         synopsis: $('c_synopsis').value.trim() || null,
@@ -221,14 +268,24 @@
         author: $('c_author').value.trim() || null,
         artist: $('c_artist').value.trim() || null,
         price_cents: Math.round(precoReais * 100),
-        cover_url: coverUrl,
         published: $('c_published').checked,
-      });
+      };
+      let insErr;
+      if (editId) {
+        if (coverUrl) dados.cover_url = coverUrl;
+        ({ error: insErr } = await sb.from('comics').update(dados).eq('id', editId));
+      } else {
+        dados.cover_url = coverUrl;
+        ({ error: insErr } = await sb.from('comics').insert(dados));
+      }
       if (insErr) throw insErr;
-      msg.className = 'msg ok'; msg.textContent = 'Comic cadastrado!';
+      msg.className = 'msg ok'; msg.textContent = editId ? 'Alterações salvas!' : 'Comic cadastrado!';
       ['c_title','c_slug','c_series','c_number','c_price','c_synopsis','c_genre','c_rating','c_author','c_artist'].forEach(id => $(id).value = '');
       $('c_cover').value = '';
+      editId = null;
+      atualizarBtnCad();
       carregarComics();
+      carregarStats();
     } catch (e) {
       msg.className = 'msg err';
       msg.textContent = 'Erro: ' + (e.message || e) + (/duplicate/i.test(e.message || '') ? ' (slug já existe)' : '');
@@ -236,42 +293,121 @@
   });
 
   // ---------- Listar comics ----------
+  async function carregarStats() {
+    const grid = $('statsGrid');
+    try {
+      async function cont(tabela, filtroCol, filtroVal) {
+        let q = sb.from(tabela).select('*', { count: 'exact', head: true });
+        if (filtroCol) q = q.eq(filtroCol, filtroVal);
+        const { count } = await q;
+        return count || 0;
+      }
+      const [kids, adultos, jogos, usuarios, biblioteca] = await Promise.all([
+        cont('comics', 'tipo', 'livro_kids'),
+        cont('comics', 'tipo', 'livro_adulto'),
+        cont('comics', 'tipo', 'jogo'),
+        cont('profiles'),
+        cont('user_library'),
+      ]);
+      const stats = [
+        { n: kids, l: 'Livros Kids' },
+        { n: adultos, l: 'Livros Adulto' },
+        { n: jogos, l: 'Jogos' },
+        { n: usuarios, l: 'Usuários' },
+        { n: biblioteca, l: 'Itens vendidos' },
+      ];
+      grid.innerHTML = stats.map(s => '<div class="stat"><div class="n">' + s.n + '</div><div class="l">' + s.l + '</div></div>').join('');
+    } catch (e) {
+      grid.innerHTML = '<p class="muted">Não foi possível carregar as estatísticas.</p>';
+    }
+  }
+
   async function carregarComics() {
-    const box = $('listaComics');
     const { data, error } = await sb.from('comics').select('*').order('created_at', { ascending: false });
-    if (error) { box.innerHTML = '<p class="msg err">Erro ao carregar: ' + error.message + '</p>'; return; }
-    if (!data || data.length === 0) { box.innerHTML = '<p class="muted">Nenhum comic ainda.</p>'; return; }
+    if (error) { $('listaComics').innerHTML = '<p class="msg err">Erro ao carregar: ' + error.message + '</p>'; return; }
+    todosComics = data || [];
+    renderComics();
+  }
+
+  function renderComics() {
+    const box = $('listaComics');
+    const termo = ($('buscaComic').value || '').trim().toLowerCase();
+    let lista = todosComics.filter(c => filtroAtivo === 'todos' || c.tipo === filtroAtivo);
+    if (termo) lista = lista.filter(c => (c.title || '').toLowerCase().includes(termo) || (c.slug || '').toLowerCase().includes(termo));
+    if (lista.length === 0) { box.innerHTML = '<p class="muted">Nenhum conteúdo encontrado.</p>'; return; }
     box.innerHTML = '';
-    data.forEach(c => {
+    const tipoLabels = { livro_kids: 'Livro Kids', livro_adulto: 'Livro (Adulto)', jogo: 'Jogo' };
+    lista.forEach(c => {
       const div = document.createElement('div');
       div.className = 'comic-item';
-      const tipoLabels = { livro_kids: 'Livro Kids', livro_adulto: 'Livro (Adulto)', jogo: 'Jogo' };
-      const tipoTxt = tipoLabels[c.tipo] || c.tipo || '—';
       const ehJogo = c.tipo === 'jogo';
       div.innerHTML =
         '<img src="' + (c.cover_url || '') + '" alt="">' +
         '<div class="info"><b></b><span></span></div>' +
         '<div class="actions">' +
-          (ehJogo ? '' : '<button class="btn-ghost">Páginas</button>') +
-          '<button class="btn-danger">Apagar</button>' +
+          '<button class="btn-ghost b-edit">Editar</button>' +
+          '<button class="btn-ghost b-pub">' + (c.published ? 'Despublicar' : 'Publicar') + '</button>' +
+          (ehJogo ? '' : '<button class="btn-ghost b-pag">Páginas</button>') +
+          '<button class="btn-danger b-del">Apagar</button>' +
         '</div>';
       div.querySelector('b').textContent = c.title;
-      div.querySelector('span').textContent = tipoTxt + '  ·  slug: ' + c.slug + '  ·  R$ ' + ((c.price_cents || 0) / 100).toFixed(2) + (c.published ? '' : '  ·  (não publicado)');
-      const botoes = div.querySelectorAll('.actions button');
-      const btnDel = botoes[botoes.length - 1];
-      if (!ehJogo) {
-        botoes[0].addEventListener('click', () => abrirPaginas(c.id, c.title));
-      }
-      btnDel.addEventListener('click', () => apagarComic(c.id, c.title));
+      div.querySelector('span').textContent = (tipoLabels[c.tipo] || c.tipo || '—') + '  ·  slug: ' + c.slug + '  ·  R$ ' + ((c.price_cents || 0) / 100).toFixed(2) + (c.published ? '' : '  ·  (não publicado)');
+      div.querySelector('.b-edit').addEventListener('click', () => editarComic(c));
+      div.querySelector('.b-pub').addEventListener('click', () => togglePublicado(c));
+      if (!ehJogo) div.querySelector('.b-pag').addEventListener('click', () => abrirPaginas(c.id, c.title));
+      div.querySelector('.b-del').addEventListener('click', () => apagarComic(c.id, c.title));
       box.appendChild(div);
     });
   }
+
+  function atualizarBtnCad() {
+    if (editId) { $('btnCadastrar').textContent = 'Salvar alterações'; return; }
+    const labels = { livro_kids: 'Cadastrar livro Kids', livro_adulto: 'Cadastrar livro Adulto', jogo: 'Cadastrar jogo' };
+    $('btnCadastrar').textContent = labels[$('cadCard').dataset.tipo] || 'Cadastrar';
+  }
+
+  function editarComic(c) {
+    editId = c.id;
+    document.querySelectorAll('.tipo-tab').forEach(t => t.classList.toggle('active', t.dataset.tipo === c.tipo));
+    $('cadCard').dataset.tipo = c.tipo;
+    $('c_title').value = c.title || '';
+    $('c_slug').value = c.slug || '';
+    $('c_price').value = c.price_cents ? (c.price_cents / 100) : '';
+    $('c_series').value = c.series || '';
+    $('c_number').value = c.number || '';
+    $('c_synopsis').value = c.synopsis || '';
+    $('c_genre').value = c.genre || '';
+    $('c_rating').value = c.age_rating || '';
+    $('c_author').value = c.author || '';
+    $('c_artist').value = c.artist || '';
+    $('c_published').checked = !!c.published;
+    atualizarBtnCad();
+    $('cadMsg').className = 'msg'; $('cadMsg').textContent = 'Editando: ' + c.title + ' (a capa só muda se você escolher uma nova)';
+    $('cadCard').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  async function togglePublicado(c) {
+    const { error } = await sb.from('comics').update({ published: !c.published }).eq('id', c.id);
+    if (error) { alert('Erro: ' + error.message); return; }
+    carregarComics();
+  }
+
+  $('buscaComic').addEventListener('input', renderComics);
+  document.querySelectorAll('.filtro-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.filtro-btn').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      filtroAtivo = b.dataset.filtro;
+      renderComics();
+    });
+  });
 
   async function apagarComic(id, title) {
     if (!confirm('Apagar o comic "' + title + '"? Isso também apaga as páginas dele.')) return;
     const { error } = await sb.from('comics').delete().eq('id', id);
     if (error) { alert('Erro ao apagar: ' + error.message); return; }
     carregarComics();
+    carregarStats();
   }
 
   // ---------- Páginas ----------
