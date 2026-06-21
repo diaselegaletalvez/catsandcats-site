@@ -403,6 +403,36 @@
     box-shadow: 0 6px 0 rgba(0,0,0,.12); transition: transform .12s;
   }
   .eb-card .btn:hover { transform: translateY(-3px); }
+
+  /* ===== Configurações (Kids) ===== */
+  .k-modal-bg { position: fixed; inset: 0; background: rgba(43,36,64,.5); backdrop-filter: blur(4px);
+    display: none; place-items: center; z-index: 1000; padding: 20px; }
+  .k-modal-bg.open { display: grid; }
+  .k-modal { background: var(--cream); border-radius: 28px; padding: 30px 26px; width: min(420px, 100%);
+    box-shadow: 0 24px 60px rgba(43,36,64,.35); position: relative; max-height: 90vh; overflow-y: auto; }
+  .k-modal h3 { font-family: "Fredoka", sans-serif; font-weight: 700; font-size: 1.6rem; color: var(--ink); }
+  .k-modal .k-sub { font-weight: 600; color: #6d6483; font-size: .9rem; margin: 4px 0 20px; }
+  .k-close { position: absolute; top: 18px; right: 20px; background: none; border: none; font-size: 1.6rem;
+    line-height: 1; color: #6d6483; cursor: pointer; }
+  .k-cfg-section { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 2px dashed #e6dcc4; }
+  .k-cfg-section:last-of-type { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .k-cfg-section h4 { font-family: "Fredoka", sans-serif; font-weight: 600; font-size: .95rem; color: var(--ink); margin-bottom: 10px; }
+  .k-select, .k-row input { width: 100%; font-family: "Nunito", sans-serif; font-weight: 600; font-size: 1rem;
+    color: var(--ink); background: #fff; border: 2px solid #eadfca; border-radius: 14px; padding: 12px 14px; }
+  .k-select:focus, .k-row input:focus { outline: none; border-color: var(--coral); }
+  .k-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+  .k-row label { font-weight: 700; font-size: .82rem; color: #6d6483; }
+  .k-email { font-weight: 700; color: var(--ink); word-break: break-all; }
+  .k-btn-full { width: 100%; font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 1rem;
+    padding: 13px; border-radius: 999px; border: none; cursor: pointer; color: #fff; background: var(--coral);
+    box-shadow: 0 5px 0 #d8503f; transition: transform .12s; margin-top: 4px; }
+  .k-btn-full:hover { transform: translateY(-2px); }
+  .k-btn-full.ghost { background: #fff; color: var(--ink); box-shadow: 0 5px 0 #eadfca; border: 2px solid #eadfca; }
+  .k-btn-full.danger { background: #fff; color: var(--coral); box-shadow: 0 5px 0 #f3c9c2; border: 2px solid #f3c9c2; }
+  .k-btn-full + .k-btn-full { margin-top: 12px; }
+  .k-msg { text-align: center; font-weight: 700; font-size: .88rem; margin-top: 14px; min-height: 18px; }
+  .k-msg.ok { color: #1e8449; } .k-msg.err { color: #c0392b; }
+  .k-pin-input { letter-spacing: .5em; text-align: center; font-size: 1.5rem !important; font-family: "Fredoka", sans-serif !important; }
 </style>
 </head>
 <body>
@@ -416,6 +446,7 @@
       <input id="busca-kids" type="text" placeholder="Buscar quadrinhos, personagens, produtos..." />
     </div>
     <div class="icons">
+      <button class="icon-btn" id="kidsSettings" title="Configurações" aria-label="Configurações" style="border:none;font:inherit;cursor:pointer;"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
       <a class="icon-btn" href="#" title="Minha conta"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></a>
       <a class="icon-btn cart" href="#" title="Carrinho"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.6"/><circle cx="18" cy="20" r="1.6"/><path d="M2.5 3.5H5l2.4 12.2h10.3L20 7H6.2"/></svg><span class="cart-count">0</span></a>
     </div>
@@ -525,6 +556,37 @@
     </div>
     <div class="foot-copy">© 2026 Cats &amp; Cats. Todos os direitos reservados. </div>
   </footer>
+
+  <div class="k-modal-bg" id="kidsSettingsModal">
+    <div class="k-modal">
+      <button class="k-close" id="kidsCfgClose" aria-label="Fechar">&times;</button>
+
+      <div id="kidsPinScreen" style="display:none">
+        <h3 id="kidsPinTitle">Senha dos pais 🔒</h3>
+        <p class="k-sub" id="kidsPinSub">Digite o PIN de 4 números pra abrir as configurações.</p>
+        <div class="k-row">
+          <input id="kidsPinInput" class="k-pin-input" type="password" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="••••">
+        </div>
+        <button class="k-btn-full" id="kidsPinOk">Confirmar</button>
+        <div class="k-msg" id="kidsPinMsg"></div>
+      </div>
+
+      <div id="kidsCfgScreen" style="display:none">
+        <h3>Configurações</h3>
+        <p class="k-sub">Idioma e conta da Cats &amp; Cats.</p>
+        <div class="k-cfg-section">
+          <h4>Idioma</h4>
+          <select id="cc-lang" class="k-select"></select>
+        </div>
+        <div class="k-cfg-section">
+          <h4>Conta</h4>
+          <div id="kidsConta"><p style="font-weight:600;color:#6d6483">Carregando...</p></div>
+        </div>
+        <div class="k-msg" id="kidsCfgMsg"></div>
+      </div>
+
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
@@ -698,6 +760,114 @@
           hamb.setAttribute('aria-expanded', 'false');
         });
       });
+    })();
+
+    // ===== Configurações Kids (idioma + conta, com PIN parental) =====
+    (function () {
+      var modal = document.getElementById('kidsSettingsModal');
+      var pinScreen = document.getElementById('kidsPinScreen');
+      var cfgScreen = document.getElementById('kidsCfgScreen');
+      var abreBtn = document.getElementById('kidsSettings');
+      if (!modal || !abreBtn) return;
+      var pinMode = 'verificar', pinAtual = '';
+
+      function fechar(){ modal.classList.remove('open'); }
+      function mostrarCfg(){ pinScreen.style.display = 'none'; cfgScreen.style.display = 'block'; renderConta(sessaoKids); }
+
+      async function mostrarPin(){
+        pinScreen.style.display = 'block'; cfgScreen.style.display = 'none';
+        var inp = document.getElementById('kidsPinInput'); inp.value = '';
+        try {
+          var r = await sb.from('profiles').select('parental_pin').eq('id', sessaoKids.user.id).single();
+          pinAtual = (r.data && r.data.parental_pin) ? String(r.data.parental_pin) : '';
+        } catch (e) { pinAtual = ''; }
+        if (!pinAtual){
+          pinMode = 'criar';
+          document.getElementById('kidsPinTitle').textContent = 'Criar senha dos pais 🔒';
+          document.getElementById('kidsPinSub').textContent = 'Crie um PIN de 4 números. Os pais usam pra abrir as configurações.';
+          document.getElementById('kidsPinOk').textContent = 'Criar PIN';
+        } else {
+          pinMode = 'verificar';
+          document.getElementById('kidsPinTitle').textContent = 'Senha dos pais 🔒';
+          document.getElementById('kidsPinSub').textContent = 'Digite o PIN de 4 números pra abrir as configurações.';
+          document.getElementById('kidsPinOk').textContent = 'Confirmar';
+        }
+        inp.focus();
+      }
+
+      function abrir(){
+        document.getElementById('kidsCfgMsg').textContent = '';
+        document.getElementById('kidsPinMsg').textContent = '';
+        if (sessaoKids && sessaoKids.user) mostrarPin(); else mostrarCfg();
+        modal.classList.add('open');
+      }
+
+      document.getElementById('kidsPinOk').addEventListener('click', async function(){
+        var inp = document.getElementById('kidsPinInput');
+        var msg = document.getElementById('kidsPinMsg'); msg.className = 'k-msg';
+        var v = (inp.value || '').trim();
+        if (!/^\d{4}$/.test(v)){ msg.classList.add('err'); msg.textContent = 'Digite 4 números.'; return; }
+        if (pinMode === 'criar'){
+          msg.textContent = 'Criando...';
+          var up = await sb.from('profiles').update({ parental_pin: v }).eq('id', sessaoKids.user.id);
+          if (up.error){ msg.classList.add('err'); msg.textContent = 'Erro: ' + up.error.message; return; }
+          pinAtual = v; mostrarCfg();
+        } else {
+          if (v === pinAtual){ mostrarCfg(); }
+          else { msg.classList.add('err'); msg.textContent = 'PIN incorreto.'; inp.value = ''; }
+        }
+      });
+
+      function renderConta(session){
+        var box = document.getElementById('kidsConta');
+        if (session && session.user){
+          box.innerHTML =
+            '<div class="k-row"><label>E-mail</label><span class="k-email" id="kidsEmail"></span></div>' +
+            '<div class="k-row"><label for="kidsNome">Seu nome</label><input id="kidsNome" type="text" placeholder="Seu nome"></div>' +
+            '<button class="k-btn-full" id="kidsSalvarNome">Salvar nome</button>' +
+            '<div class="k-row" style="margin-top:16px"><label for="kidsNovaSenha">Nova senha</label><input id="kidsNovaSenha" type="password" placeholder="mín. 6 caracteres"></div>' +
+            '<button class="k-btn-full ghost" id="kidsTrocarSenha">Trocar senha</button>' +
+            '<button class="k-btn-full danger" id="kidsSair">Sair da conta</button>';
+          document.getElementById('kidsEmail').textContent = session.user.email || '—';
+          sb.from('profiles').select('first_name,name').eq('id', session.user.id).single().then(function(r){
+            var inp = document.getElementById('kidsNome');
+            if (r.data && inp){ inp.value = r.data.first_name || r.data.name || ''; }
+          }).catch(function(){});
+        } else {
+          box.innerHTML =
+            '<p style="font-weight:600;color:#6d6483;margin-bottom:12px">Você não está conectado.</p>' +
+            '<button class="k-btn-full" id="kidsEntrar">Entrar</button>';
+        }
+      }
+
+      modal.addEventListener('click', async function(e){
+        var id = e.target && e.target.id;
+        if (!id) return;
+        if (id === 'kidsEntrar'){ window.location.href = '/painel/'; return; }
+        var msg = document.getElementById('kidsCfgMsg'); msg.className = 'k-msg';
+        if (id === 'kidsSair'){ if (sb) sb.auth.signOut(); fechar(); }
+        else if (id === 'kidsSalvarNome'){
+          if (!sessaoKids || !sessaoKids.user) return;
+          var nome = document.getElementById('kidsNome').value.trim();
+          if (!nome){ msg.classList.add('err'); msg.textContent = 'Digite um nome.'; return; }
+          msg.textContent = 'Salvando...';
+          var up = await sb.from('profiles').update({ first_name: nome }).eq('id', sessaoKids.user.id);
+          if (up.error){ msg.classList.add('err'); msg.textContent = 'Não deu pra salvar.'; }
+          else { msg.classList.add('ok'); msg.textContent = 'Nome salvo! 🎉'; }
+        }
+        else if (id === 'kidsTrocarSenha'){
+          var nova = document.getElementById('kidsNovaSenha').value;
+          if (!nova || nova.length < 6){ msg.classList.add('err'); msg.textContent = 'A senha precisa de 6+ caracteres.'; return; }
+          msg.textContent = 'Trocando...';
+          var up2 = await sb.auth.updateUser({ password: nova });
+          if (up2.error){ msg.classList.add('err'); msg.textContent = 'Erro: ' + up2.error.message; }
+          else { msg.classList.add('ok'); msg.textContent = 'Senha trocada! 🎉'; document.getElementById('kidsNovaSenha').value = ''; }
+        }
+      });
+
+      abreBtn.addEventListener('click', abrir);
+      document.getElementById('kidsCfgClose').addEventListener('click', fechar);
+      modal.addEventListener('click', function(e){ if (e.target === modal) fechar(); });
     })();
   </script>
 
